@@ -1037,6 +1037,11 @@ impl TestContext {
             .env_remove(EnvVars::UV_CACHE_DIR)
             .env_remove(EnvVars::UV_TOOL_BIN_DIR)
             .env_remove(EnvVars::XDG_CONFIG_HOME)
+            // Ensure tests use public PyPI, not internal mirrors that may lack upload dates
+            .env_remove(EnvVars::UV_INDEX_URL)
+            .env_remove(EnvVars::UV_EXTRA_INDEX_URL)
+            .env_remove(EnvVars::UV_PYTHON_INSTALL_MIRROR)
+            .env_remove(EnvVars::UV_INSTALLER_GHE_BASE_URL)
             // I believe the intent of all tests is that they are run outside the
             // context of an existing git repository. And when they aren't, state
             // from the parent git repository can bleed into the behavior of `uv
@@ -1526,6 +1531,12 @@ impl TestContext {
             self.extra_env
                 .push((EnvVars::HOME.to_string().into(), home));
         }
+        // Use the test's isolated config directory to avoid reading user
+        // configuration files (like `.python-version`) that could interfere with tests.
+        self.extra_env.push((
+            EnvVars::XDG_CONFIG_HOME.into(),
+            self.user_config_dir.as_os_str().into(),
+        ));
         self
     }
 
