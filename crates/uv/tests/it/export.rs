@@ -36,7 +36,7 @@ fn requirements_txt_dependency() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export(), @r"
+    uv_snapshot!(context.filters(), context.export(), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -58,7 +58,7 @@ fn requirements_txt_dependency() -> Result<()> {
 
     ----- stderr -----
     Resolved 4 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -84,7 +84,7 @@ fn requirements_txt_export_no_header() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export().arg("--no-header"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--no-header"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -104,7 +104,7 @@ fn requirements_txt_export_no_header() -> Result<()> {
 
     ----- stderr -----
     Resolved 4 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -130,7 +130,7 @@ fn requirements_txt_dependency_extra() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export(), @r"
+    uv_snapshot!(context.filters(), context.export(), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -187,7 +187,7 @@ fn requirements_txt_dependency_extra() -> Result<()> {
 
     ----- stderr -----
     Resolved 10 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -217,7 +217,7 @@ fn requirements_txt_project_extra() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export(), @r"
+    uv_snapshot!(context.filters(), context.export(), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -231,9 +231,9 @@ fn requirements_txt_project_extra() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--extra").arg("pytest").arg("--extra").arg("async").arg("--no-extra").arg("pytest"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--extra").arg("pytest").arg("--extra").arg("async").arg("--no-extra").arg("pytest"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -259,9 +259,9 @@ fn requirements_txt_project_extra() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--extra").arg("pytest"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--extra").arg("pytest"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -279,9 +279,9 @@ fn requirements_txt_project_extra() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--all-extras"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--all-extras"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -311,9 +311,9 @@ fn requirements_txt_project_extra() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--all-extras").arg("--no-extra").arg("pytest"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--all-extras").arg("--no-extra").arg("pytest"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -339,7 +339,7 @@ fn requirements_txt_project_extra() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -378,7 +378,7 @@ fn requirements_txt_prune() -> Result<()> {
             .arg("--no-hashes")
             .arg("--prune")
             .arg("jupyter-core"),
-            @"
+            @r"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -430,7 +430,7 @@ fn requirements_txt_dependency_marker() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export(), @r"
+    uv_snapshot!(context.filters(), context.export(), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -456,7 +456,7 @@ fn requirements_txt_dependency_marker() -> Result<()> {
 
     ----- stderr -----
     Resolved 5 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -486,7 +486,7 @@ fn requirements_txt_dependency_multiple_markers() -> Result<()> {
     context.lock().assert().success();
 
     // Note that the `python_version > '3.11'` markers disappear due to `requires-python = ">=3.12"`
-    uv_snapshot!(context.filters(), context.export(), @r"
+    uv_snapshot!(context.filters(), context.export(), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -539,7 +539,7 @@ fn requirements_txt_dependency_multiple_markers() -> Result<()> {
 
     ----- stderr -----
     Resolved 10 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -566,14 +566,14 @@ fn requirements_txt_dependency_conflicting_markers() -> Result<()> {
         "#,
     )?;
 
-    uv_snapshot!(context.filters(), context.lock(), @"
+    uv_snapshot!(context.filters(), context.lock(), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
 
     ----- stderr -----
     Resolved 11 packages in [TIME]
-    ");
+    "###);
 
     let lock = context.read("uv.lock");
 
@@ -731,7 +731,7 @@ fn requirements_txt_dependency_conflicting_markers() -> Result<()> {
         }
     );
 
-    uv_snapshot!(context.filters(), context.export(), @r"
+    uv_snapshot!(context.filters(), context.export(), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -783,7 +783,7 @@ fn requirements_txt_dependency_conflicting_markers() -> Result<()> {
 
     ----- stderr -----
     Resolved 11 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -830,7 +830,7 @@ fn requirements_txt_non_root() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export().arg("--package").arg("child"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--package").arg("child"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -844,7 +844,7 @@ fn requirements_txt_non_root() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -891,7 +891,7 @@ fn allrequirements_txt_() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export().arg("--all-packages"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--all-packages"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -919,7 +919,7 @@ fn allrequirements_txt_() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -969,7 +969,7 @@ fn requirements_txt_frozen() -> Result<()> {
     // Remove the child `pyproject.toml`.
     fs_err::remove_dir_all(child.path())?;
 
-    uv_snapshot!(context.filters(), context.export().arg("--all-packages"), @"
+    uv_snapshot!(context.filters(), context.export().arg("--all-packages"), @r###"
     success: false
     exit_code: 1
     ----- stdout -----
@@ -978,9 +978,9 @@ fn requirements_txt_frozen() -> Result<()> {
       × Failed to build `project @ file://[TEMP_DIR]/`
       ├─▶ Failed to parse entry: `child`
       ╰─▶ `child` references a workspace in `tool.uv.sources` (e.g., `child = { workspace = true }`), but is not a workspace member
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--all-packages").arg("--frozen"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--all-packages").arg("--frozen"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -1007,7 +1007,7 @@ fn requirements_txt_frozen() -> Result<()> {
         # via anyio
 
     ----- stderr -----
-    ");
+    "###);
 
     Ok(())
 }
@@ -1035,7 +1035,7 @@ fn requirements_txt_create_missing_dir() -> Result<()> {
 
     uv_snapshot!(context.filters(), context.export()
         .arg("--output-file")
-        .arg("requirements/requirements.txt"), @r"
+        .arg("requirements/requirements.txt"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -1057,7 +1057,7 @@ fn requirements_txt_create_missing_dir() -> Result<()> {
 
     ----- stderr -----
     Resolved 4 packages in [TIME]
-    ");
+    "###);
     //
     // Read the file contents.
     let contents = apply_filters(
@@ -1070,7 +1070,7 @@ fn requirements_txt_create_missing_dir() -> Result<()> {
         .unwrap(),
         context.filters(),
     );
-    insta::assert_snapshot!(contents, @r"
+    insta::assert_snapshot!(contents, @r###"
     # This file was autogenerated by uv via the following command:
     #    uv export --cache-dir [CACHE_DIR] --output-file requirements/requirements.txt
     -e .
@@ -1086,7 +1086,7 @@ fn requirements_txt_create_missing_dir() -> Result<()> {
         --hash=sha256:2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2 \
         --hash=sha256:f4324edc670a0f49750a81b895f35c3adb843cca46f0530f79fc1babb23789dc
         # via anyio
-    ");
+    "###);
     Ok(())
 }
 
@@ -1107,7 +1107,7 @@ fn requirements_txt_non_project() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export(), @"
+    uv_snapshot!(context.filters(), context.export(), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -1117,9 +1117,9 @@ fn requirements_txt_non_project() -> Result<()> {
     ----- stderr -----
     warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
     Resolved 3 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--group").arg("async"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--group").arg("async"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -1140,7 +1140,7 @@ fn requirements_txt_non_project() -> Result<()> {
     ----- stderr -----
     warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
     Resolved 3 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -1156,7 +1156,7 @@ fn virtual_empty() -> Result<()> {
         wow = "someconfig"
     "#})?;
 
-    uv_snapshot!(context.filters(), context.export(), @"
+    uv_snapshot!(context.filters(), context.export(), @r"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -1259,7 +1259,7 @@ fn requirements_txt_https_git_credentials() -> Result<()> {
     context.lock().assert().success();
 
     // The token should not be included in the export
-    uv_snapshot!(context.filters(), context.export(), @"
+    uv_snapshot!(context.filters(), context.export(), @r"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -1380,7 +1380,7 @@ fn requirements_txt_ssh_git_username() -> Result<()> {
         ssh_deploy_key.portable_display()
     );
 
-    uv_snapshot!(context.filters(), context.export().env(EnvVars::GIT_SSH_COMMAND, git_ssh_command), @"
+    uv_snapshot!(context.filters(), context.export().env(EnvVars::GIT_SSH_COMMAND, git_ssh_command), @r"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -1446,7 +1446,7 @@ fn requirements_txt_non_project_marker() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export(), @"
+    uv_snapshot!(context.filters(), context.export(), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -1456,9 +1456,9 @@ fn requirements_txt_non_project_marker() -> Result<()> {
     ----- stderr -----
     warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
     Resolved 3 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--group").arg("async"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--group").arg("async"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -1479,7 +1479,7 @@ fn requirements_txt_non_project_marker() -> Result<()> {
     ----- stderr -----
     warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
     Resolved 3 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -1516,7 +1516,7 @@ fn requirements_txt_non_project_workspace() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export(), @r"
+    uv_snapshot!(context.filters(), context.export(), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -1530,9 +1530,9 @@ fn requirements_txt_non_project_workspace() -> Result<()> {
 
     ----- stderr -----
     Resolved 5 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--group").arg("async"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--group").arg("async"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -1557,7 +1557,7 @@ fn requirements_txt_non_project_workspace() -> Result<()> {
 
     ----- stderr -----
     Resolved 5 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -1693,7 +1693,7 @@ fn requirements_txt_non_project_fork() -> Result<()> {
         }
     );
 
-    uv_snapshot!(context.filters(), context.export(), @r"
+    uv_snapshot!(context.filters(), context.export(), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -1719,9 +1719,9 @@ fn requirements_txt_non_project_fork() -> Result<()> {
 
     ----- stderr -----
     Resolved 5 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--group").arg("async"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--group").arg("async"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -1747,9 +1747,9 @@ fn requirements_txt_non_project_fork() -> Result<()> {
 
     ----- stderr -----
     Resolved 5 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--group").arg("async").arg("--prune").arg("child"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--group").arg("async").arg("--prune").arg("child"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -1772,9 +1772,9 @@ fn requirements_txt_non_project_fork() -> Result<()> {
 
     ----- stderr -----
     Resolved 5 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--prune").arg("child"), @"
+    uv_snapshot!(context.filters(), context.export().arg("--prune").arg("child"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -1783,7 +1783,7 @@ fn requirements_txt_non_project_fork() -> Result<()> {
 
     ----- stderr -----
     Resolved 5 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -1830,7 +1830,7 @@ fn requirements_txt_relative_path() -> Result<()> {
     // Pipe the output to requirements.txt.
     let file = std::fs::File::create(project.child("requirements.txt")).unwrap();
 
-    uv_snapshot!(context.filters(), context.export().stdout(Stdio::from(file)).current_dir(&project), @"
+    uv_snapshot!(context.filters(), context.export().stdout(Stdio::from(file)).current_dir(&project), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -1838,14 +1838,14 @@ fn requirements_txt_relative_path() -> Result<()> {
     ----- stderr -----
     Using CPython 3.12.[X] interpreter at: [PYTHON-3.12]
     Resolved 3 packages in [TIME]
-    ");
+    "###);
 
     // Read the file contents.
     let contents = apply_filters(
         fs_err::read_to_string(project.child("requirements.txt")).unwrap(),
         context.filters(),
     );
-    insta::assert_snapshot!(contents, @r"
+    insta::assert_snapshot!(contents, @r###"
     # This file was autogenerated by uv via the following command:
     #    uv export --cache-dir [CACHE_DIR]
     -e .
@@ -1855,10 +1855,10 @@ fn requirements_txt_relative_path() -> Result<()> {
         --hash=sha256:2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3 \
         --hash=sha256:b6a85871a79d2e3b22d2d1b94ac2824226a63c6b741c88f7ae975f18b6778374
         # via dependency
-    ");
+    "###);
 
     // Install the dependencies.
-    uv_snapshot!(context.filters(), context.pip_install().arg("--requirement").arg("requirements.txt").current_dir(&project), @"
+    uv_snapshot!(context.filters(), context.pip_install().arg("--requirement").arg("requirements.txt").current_dir(&project), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -1871,7 +1871,7 @@ fn requirements_txt_relative_path() -> Result<()> {
      + dependency==0.1.0 (from file://[TEMP_DIR]/dependency)
      + iniconfig==2.0.0
      + project==0.1.0 (from file://[TEMP_DIR]/project)
-    ");
+    "###);
 
     Ok(())
 }
@@ -1992,7 +1992,7 @@ fn requirements_txt_no_hashes() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export().arg("--no-hashes"), @"
+    uv_snapshot!(context.filters(), context.export().arg("--no-hashes"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2008,7 +2008,7 @@ fn requirements_txt_no_hashes() -> Result<()> {
 
     ----- stderr -----
     Resolved 4 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -2034,7 +2034,7 @@ fn requirements_txt_output_file() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export().arg("--output-file").arg("requirements.txt"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--output-file").arg("requirements.txt"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2056,10 +2056,10 @@ fn requirements_txt_output_file() -> Result<()> {
 
     ----- stderr -----
     Resolved 4 packages in [TIME]
-    ");
+    "###);
 
     let contents = apply_filters(context.read("requirements.txt"), context.filters());
-    insta::assert_snapshot!(contents, @r"
+    insta::assert_snapshot!(contents, @r###"
     # This file was autogenerated by uv via the following command:
     #    uv export --cache-dir [CACHE_DIR] --output-file requirements.txt
     -e .
@@ -2075,7 +2075,7 @@ fn requirements_txt_output_file() -> Result<()> {
         --hash=sha256:2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2 \
         --hash=sha256:f4324edc670a0f49750a81b895f35c3adb843cca46f0530f79fc1babb23789dc
         # via anyio
-    ");
+    "###);
 
     Ok(())
 }
@@ -2123,7 +2123,7 @@ fn requirements_txt_no_emit() -> Result<()> {
     context.lock().assert().success();
 
     // Exclude `anyio`.
-    uv_snapshot!(context.filters(), context.export().arg("--no-emit-package").arg("anyio"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--no-emit-package").arg("anyio"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2147,10 +2147,10 @@ fn requirements_txt_no_emit() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
     // Exclude `project`.
-    uv_snapshot!(context.filters(), context.export().arg("--no-emit-project"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--no-emit-project"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2177,10 +2177,10 @@ fn requirements_txt_no_emit() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
     // Exclude `child`.
-    uv_snapshot!(context.filters(), context.export().arg("--no-emit-project").arg("--package").arg("child"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--no-emit-project").arg("--package").arg("child"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2193,10 +2193,10 @@ fn requirements_txt_no_emit() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
     // Exclude the workspace.
-    uv_snapshot!(context.filters(), context.export().arg("--no-emit-workspace"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--no-emit-workspace"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2221,7 +2221,7 @@ fn requirements_txt_no_emit() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
     // Remove the member.
     let pyproject_toml = context.temp_dir.child("pyproject.toml");
@@ -2240,7 +2240,7 @@ fn requirements_txt_no_emit() -> Result<()> {
     )?;
 
     // Exclude the workspace.
-    uv_snapshot!(context.filters(), context.export().arg("--no-emit-workspace"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--no-emit-workspace"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2261,7 +2261,7 @@ fn requirements_txt_no_emit() -> Result<()> {
 
     ----- stderr -----
     Resolved 4 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -2308,7 +2308,7 @@ fn requirements_txt_only_emit() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export().arg("--only-emit-workspace"), @"
+    uv_snapshot!(context.filters(), context.export().arg("--only-emit-workspace"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2320,9 +2320,9 @@ fn requirements_txt_only_emit() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--only-emit-project"), @"
+    uv_snapshot!(context.filters(), context.export().arg("--only-emit-project"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2332,9 +2332,9 @@ fn requirements_txt_only_emit() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--only-emit-package").arg("anyio"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--only-emit-package").arg("anyio"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2347,7 +2347,7 @@ fn requirements_txt_only_emit() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -2394,7 +2394,7 @@ fn requirements_txt_no_editable() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export().arg("--no-editable"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--no-editable"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2422,7 +2422,7 @@ fn requirements_txt_no_editable() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -2449,7 +2449,7 @@ fn requirements_txt_export_group() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export(), @r"
+    uv_snapshot!(context.filters(), context.export(), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2465,9 +2465,9 @@ fn requirements_txt_export_group() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--only-group").arg("bar"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--only-group").arg("bar"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2479,9 +2479,9 @@ fn requirements_txt_export_group() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--group").arg("foo"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--group").arg("foo"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2505,9 +2505,9 @@ fn requirements_txt_export_group() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--group").arg("foo").arg("--group").arg("bar"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--group").arg("foo").arg("--group").arg("bar"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2534,9 +2534,9 @@ fn requirements_txt_export_group() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--all-groups"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--all-groups"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2563,9 +2563,9 @@ fn requirements_txt_export_group() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--all-groups").arg("--no-group").arg("bar"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--all-groups").arg("--no-group").arg("bar"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2589,9 +2589,9 @@ fn requirements_txt_export_group() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--all-groups").arg("--no-group").arg("baz"), @"
+    uv_snapshot!(context.filters(), context.export().arg("--all-groups").arg("--no-group").arg("baz"), @r###"
     success: false
     exit_code: 2
     ----- stdout -----
@@ -2599,7 +2599,7 @@ fn requirements_txt_export_group() -> Result<()> {
     ----- stderr -----
     Resolved 6 packages in [TIME]
     error: Group `baz` is not defined in the project's `dependency-groups` table
-    ");
+    "###);
 
     Ok(())
 }
@@ -2619,7 +2619,7 @@ fn requirements_txt_script() -> Result<()> {
         # ///
     "#})?;
 
-    uv_snapshot!(context.filters(), context.export().arg("--script").arg(script.path()), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--script").arg(script.path()), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2642,20 +2642,20 @@ fn requirements_txt_script() -> Result<()> {
 
     ----- stderr -----
     Resolved 4 packages in [TIME]
-    ");
+    "###);
 
     // If the lockfile didn't exist already, it shouldn't be persisted to disk.
     assert!(!context.temp_dir.child("uv.lock").exists());
 
     // Explicitly lock the script.
-    uv_snapshot!(context.filters(), context.lock().arg("--script").arg(script.path()), @"
+    uv_snapshot!(context.filters(), context.lock().arg("--script").arg(script.path()), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
 
     ----- stderr -----
     Resolved 4 packages in [TIME]
-    ");
+    "###);
 
     let lock = context.read("script.py.lock");
 
@@ -2748,7 +2748,7 @@ fn requirements_txt_script() -> Result<()> {
     "#})?;
 
     // `uv tree` should update the lockfile.
-    uv_snapshot!(context.filters(), context.export().arg("--script").arg(script.path()), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--script").arg(script.path()), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2774,7 +2774,7 @@ fn requirements_txt_script() -> Result<()> {
 
     ----- stderr -----
     Resolved 5 packages in [TIME]
-    ");
+    "###);
 
     let lock = context.read("script.py.lock");
 
@@ -2900,7 +2900,7 @@ fn requirements_txt_conflicts() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export(), @r"
+    uv_snapshot!(context.filters(), context.export(), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2914,9 +2914,9 @@ fn requirements_txt_conflicts() -> Result<()> {
 
     ----- stderr -----
     Resolved 4 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--extra").arg("extra1"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--extra").arg("extra1"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2934,9 +2934,9 @@ fn requirements_txt_conflicts() -> Result<()> {
 
     ----- stderr -----
     Resolved 4 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--extra").arg("extra2"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--extra").arg("extra2"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -2954,9 +2954,9 @@ fn requirements_txt_conflicts() -> Result<()> {
 
     ----- stderr -----
     Resolved 4 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--extra").arg("extra1").arg("--extra").arg("extra2"), @"
+    uv_snapshot!(context.filters(), context.export().arg("--extra").arg("extra1").arg("--extra").arg("extra2"), @r###"
     success: false
     exit_code: 2
     ----- stdout -----
@@ -2964,7 +2964,7 @@ fn requirements_txt_conflicts() -> Result<()> {
     ----- stderr -----
     Resolved 4 packages in [TIME]
     error: Extras `extra1` and `extra2` are incompatible with the declared conflicts: {`project[extra1]`, `project[extra2]`}
-    ");
+    "###);
 
     Ok(())
 }
@@ -3002,7 +3002,7 @@ fn requirements_txt_simple_conflict_markers() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export(), @r"
+    uv_snapshot!(context.filters(), context.export(), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -3023,9 +3023,9 @@ fn requirements_txt_simple_conflict_markers() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
-    uv_snapshot!(context.filters(), context.export().arg("--extra").arg("cpu"), @r"
+    uv_snapshot!(context.filters(), context.export().arg("--extra").arg("cpu"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -3049,7 +3049,7 @@ fn requirements_txt_simple_conflict_markers() -> Result<()> {
 
     ----- stderr -----
     Resolved 6 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -3648,6 +3648,10 @@ fn pep_751_dependency() -> Result<()> {
     [[packages]]
     name = "anyio"
     version = "3.7.0"
+    dependencies = [
+        { name = "idna", version = "3.6" },
+        { name = "sniffio", version = "1.3.1" },
+    ]
     index = "https://pypi.org/simple"
     sdist = { url = "https://files.pythonhosted.org/packages/c6/b3/fefbf7e78ab3b805dec67d698dc18dd505af7a18a8dd08868c9b4fa736b5/anyio-3.7.0.tar.gz", upload-time = 2023-05-27T11:12:46Z, size = 142737, hashes = { sha256 = "275d9973793619a5374e1c89a4f4ad3f4b0a5510a2b5b939444bee8f4c4d37ce" } }
     wheels = [{ url = "https://files.pythonhosted.org/packages/68/fe/7ce1926952c8a403b35029e194555558514b365ad77d75125f521a2bec62/anyio-3.7.0-py3-none-any.whl", upload-time = 2023-05-27T11:12:44Z, size = 80873, hashes = { sha256 = "eddca883c4175f14df8aedce21054bfca3adb70ffe76a9f607aef9d7fa2ea7f0" } }]
@@ -3661,6 +3665,7 @@ fn pep_751_dependency() -> Result<()> {
 
     [[packages]]
     name = "project"
+    dependencies = [{ name = "anyio", version = "3.7.0" }]
     directory = { path = ".", editable = true }
 
     [[packages]]
@@ -3709,6 +3714,10 @@ fn pep_751_export_no_header() -> Result<()> {
     [[packages]]
     name = "anyio"
     version = "3.7.0"
+    dependencies = [
+        { name = "idna", version = "3.6" },
+        { name = "sniffio", version = "1.3.1" },
+    ]
     index = "https://pypi.org/simple"
     sdist = { url = "https://files.pythonhosted.org/packages/c6/b3/fefbf7e78ab3b805dec67d698dc18dd505af7a18a8dd08868c9b4fa736b5/anyio-3.7.0.tar.gz", upload-time = 2023-05-27T11:12:46Z, size = 142737, hashes = { sha256 = "275d9973793619a5374e1c89a4f4ad3f4b0a5510a2b5b939444bee8f4c4d37ce" } }
     wheels = [{ url = "https://files.pythonhosted.org/packages/68/fe/7ce1926952c8a403b35029e194555558514b365ad77d75125f521a2bec62/anyio-3.7.0-py3-none-any.whl", upload-time = 2023-05-27T11:12:44Z, size = 80873, hashes = { sha256 = "eddca883c4175f14df8aedce21054bfca3adb70ffe76a9f607aef9d7fa2ea7f0" } }]
@@ -3722,6 +3731,7 @@ fn pep_751_export_no_header() -> Result<()> {
 
     [[packages]]
     name = "project"
+    dependencies = [{ name = "anyio", version = "3.7.0" }]
     directory = { path = ".", editable = true }
 
     [[packages]]
@@ -3772,6 +3782,10 @@ fn pep_751_export_no_editable() -> Result<()> {
     [[packages]]
     name = "anyio"
     version = "3.7.0"
+    dependencies = [
+        { name = "idna", version = "3.6" },
+        { name = "sniffio", version = "1.3.1" },
+    ]
     index = "https://pypi.org/simple"
     sdist = { url = "https://files.pythonhosted.org/packages/c6/b3/fefbf7e78ab3b805dec67d698dc18dd505af7a18a8dd08868c9b4fa736b5/anyio-3.7.0.tar.gz", upload-time = 2023-05-27T11:12:46Z, size = 142737, hashes = { sha256 = "275d9973793619a5374e1c89a4f4ad3f4b0a5510a2b5b939444bee8f4c4d37ce" } }
     wheels = [{ url = "https://files.pythonhosted.org/packages/68/fe/7ce1926952c8a403b35029e194555558514b365ad77d75125f521a2bec62/anyio-3.7.0-py3-none-any.whl", upload-time = 2023-05-27T11:12:44Z, size = 80873, hashes = { sha256 = "eddca883c4175f14df8aedce21054bfca3adb70ffe76a9f607aef9d7fa2ea7f0" } }]
@@ -3785,6 +3799,7 @@ fn pep_751_export_no_editable() -> Result<()> {
 
     [[packages]]
     name = "project"
+    dependencies = [{ name = "anyio", version = "3.7.0" }]
     directory = { path = "." }
 
     [[packages]]
@@ -3842,6 +3857,7 @@ fn pep_751_dependency_extra() -> Result<()> {
     [[packages]]
     name = "click"
     version = "8.1.7"
+    dependencies = [{ name = "colorama", version = "0.4.6", marker = "sys_platform == 'win32'" }]
     index = "https://pypi.org/simple"
     sdist = { url = "https://files.pythonhosted.org/packages/96/d3/f04c7bfcf5c1862a2a5b845c6b2b360488cf47af55dfa79c98f6a6bf98b5/click-8.1.7.tar.gz", upload-time = 2023-08-17T17:29:11Z, size = 336121, hashes = { sha256 = "ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de" } }
     wheels = [{ url = "https://files.pythonhosted.org/packages/00/2e/d53fa4befbf2cfa713304affc7ca780ce4fc1fd8710527771b58311a3229/click-8.1.7-py3-none-any.whl", upload-time = 2023-08-17T17:29:10Z, size = 97941, hashes = { sha256 = "ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28" } }]
@@ -3857,6 +3873,14 @@ fn pep_751_dependency_extra() -> Result<()> {
     [[packages]]
     name = "flask"
     version = "3.0.2"
+    dependencies = [
+        { name = "blinker", version = "1.7.0" },
+        { name = "click", version = "8.1.7" },
+        { name = "itsdangerous", version = "2.1.2" },
+        { name = "jinja2", version = "3.1.3" },
+        { name = "python-dotenv", version = "1.0.1", marker = "extra == 'dotenv'" },
+        { name = "werkzeug", version = "3.0.1" },
+    ]
     index = "https://pypi.org/simple"
     sdist = { url = "https://files.pythonhosted.org/packages/3f/e0/a89e8120faea1edbfca1a9b171cff7f2bf62ec860bbafcb2c2387c0317be/flask-3.0.2.tar.gz", upload-time = 2024-02-03T21:11:44Z, size = 675248, hashes = { sha256 = "822c03f4b799204250a7ee84b1eddc40665395333973dfb9deebfe425fefcb7d" } }
     wheels = [{ url = "https://files.pythonhosted.org/packages/93/a6/aa98bfe0eb9b8b15d36cdfd03c8ca86a03968a87f27ce224fb4f766acb23/flask-3.0.2-py3-none-any.whl", upload-time = 2024-02-03T21:11:42Z, size = 101300, hashes = { sha256 = "3232e0e9c850d781933cf0207523d1ece087eb8d87b23777ae38456e2fbe7c6e" } }]
@@ -3871,6 +3895,7 @@ fn pep_751_dependency_extra() -> Result<()> {
     [[packages]]
     name = "jinja2"
     version = "3.1.3"
+    dependencies = [{ name = "markupsafe", version = "2.1.5" }]
     index = "https://pypi.org/simple"
     sdist = { url = "https://files.pythonhosted.org/packages/b2/5e/3a21abf3cd467d7876045335e681d276ac32492febe6d98ad89562d1a7e1/Jinja2-3.1.3.tar.gz", upload-time = 2024-01-10T23:12:21Z, size = 268261, hashes = { sha256 = "ac8bd6544d4bb2c9792bf3a159e80bba8fda7f07e81bc3aed565432d5925ba90" } }
     wheels = [{ name = "jinja2-3.1.3-py3-none-any.whl", url = "https://files.pythonhosted.org/packages/30/6d/6de6be2d02603ab56e72997708809e8a5b0fbfee080735109b40a3564843/Jinja2-3.1.3-py3-none-any.whl", upload-time = 2024-01-10T23:12:19Z, size = 133236, hashes = { sha256 = "7d6d50dd97d52cbc355597bd845fabfbac3f551e1f99619e39a35ce8c370b5fa" } }]
@@ -3895,6 +3920,7 @@ fn pep_751_dependency_extra() -> Result<()> {
 
     [[packages]]
     name = "project"
+    dependencies = [{ name = "flask", version = "3.0.2", extras = ["dotenv"] }]
     directory = { path = ".", editable = true }
 
     [[packages]]
@@ -3907,6 +3933,7 @@ fn pep_751_dependency_extra() -> Result<()> {
     [[packages]]
     name = "werkzeug"
     version = "3.0.1"
+    dependencies = [{ name = "markupsafe", version = "2.1.5" }]
     index = "https://pypi.org/simple"
     sdist = { url = "https://files.pythonhosted.org/packages/0d/cc/ff1904eb5eb4b455e442834dabf9427331ac0fa02853bf83db817a7dd53d/werkzeug-3.0.1.tar.gz", upload-time = 2023-10-24T20:57:50Z, size = 801436, hashes = { sha256 = "507e811ecea72b18a404947aded4b3390e1db8f826b494d76550ef45bb3b1dcc" } }
     wheels = [{ url = "https://files.pythonhosted.org/packages/c3/fc/254c3e9b5feb89ff5b9076a23218dafbc99c96ac5941e900b71206e6313b/werkzeug-3.0.1-py3-none-any.whl", upload-time = 2023-10-24T20:57:47Z, size = 226669, hashes = { sha256 = "90a285dc0e42ad56b34e696398b8122ee4c681833fb35b8334a095d82c56da10" } }]
@@ -3952,9 +3979,18 @@ fn pep_751_project_extra() -> Result<()> {
     lock-version = "1.0"
     created-by = "uv"
     requires-python = ">=3.12"
+    extras = [
+        "async",
+        "pytest",
+    ]
 
     [[packages]]
     name = "project"
+    dependencies = [
+        { name = "anyio", version = "3.7.0", marker = "'async' in extras" },
+        { name = "iniconfig", version = "2.0.0", marker = "'pytest' in extras" },
+        { name = "typing-extensions", version = "4.10.0" },
+    ]
     directory = { path = ".", editable = true }
 
     [[packages]]
@@ -3977,10 +4013,18 @@ fn pep_751_project_extra() -> Result<()> {
     lock-version = "1.0"
     created-by = "uv"
     requires-python = ">=3.12"
+    extras = [
+        "async",
+        "pytest",
+    ]
 
     [[packages]]
     name = "anyio"
     version = "3.7.0"
+    dependencies = [
+        { name = "idna", version = "3.6" },
+        { name = "sniffio", version = "1.3.1" },
+    ]
     index = "https://pypi.org/simple"
     sdist = { url = "https://files.pythonhosted.org/packages/c6/b3/fefbf7e78ab3b805dec67d698dc18dd505af7a18a8dd08868c9b4fa736b5/anyio-3.7.0.tar.gz", upload-time = 2023-05-27T11:12:46Z, size = 142737, hashes = { sha256 = "275d9973793619a5374e1c89a4f4ad3f4b0a5510a2b5b939444bee8f4c4d37ce" } }
     wheels = [{ url = "https://files.pythonhosted.org/packages/68/fe/7ce1926952c8a403b35029e194555558514b365ad77d75125f521a2bec62/anyio-3.7.0-py3-none-any.whl", upload-time = 2023-05-27T11:12:44Z, size = 80873, hashes = { sha256 = "eddca883c4175f14df8aedce21054bfca3adb70ffe76a9f607aef9d7fa2ea7f0" } }]
@@ -3994,6 +4038,11 @@ fn pep_751_project_extra() -> Result<()> {
 
     [[packages]]
     name = "project"
+    dependencies = [
+        { name = "anyio", version = "3.7.0", marker = "'async' in extras" },
+        { name = "iniconfig", version = "2.0.0", marker = "'pytest' in extras" },
+        { name = "typing-extensions", version = "4.10.0" },
+    ]
     directory = { path = ".", editable = true }
 
     [[packages]]
@@ -4023,6 +4072,10 @@ fn pep_751_project_extra() -> Result<()> {
     lock-version = "1.0"
     created-by = "uv"
     requires-python = ">=3.12"
+    extras = [
+        "async",
+        "pytest",
+    ]
 
     [[packages]]
     name = "iniconfig"
@@ -4033,6 +4086,11 @@ fn pep_751_project_extra() -> Result<()> {
 
     [[packages]]
     name = "project"
+    dependencies = [
+        { name = "anyio", version = "3.7.0", marker = "'async' in extras" },
+        { name = "iniconfig", version = "2.0.0", marker = "'pytest' in extras" },
+        { name = "typing-extensions", version = "4.10.0" },
+    ]
     directory = { path = ".", editable = true }
 
     [[packages]]
@@ -4055,10 +4113,18 @@ fn pep_751_project_extra() -> Result<()> {
     lock-version = "1.0"
     created-by = "uv"
     requires-python = ">=3.12"
+    extras = [
+        "async",
+        "pytest",
+    ]
 
     [[packages]]
     name = "anyio"
     version = "3.7.0"
+    dependencies = [
+        { name = "idna", version = "3.6" },
+        { name = "sniffio", version = "1.3.1" },
+    ]
     index = "https://pypi.org/simple"
     sdist = { url = "https://files.pythonhosted.org/packages/c6/b3/fefbf7e78ab3b805dec67d698dc18dd505af7a18a8dd08868c9b4fa736b5/anyio-3.7.0.tar.gz", upload-time = 2023-05-27T11:12:46Z, size = 142737, hashes = { sha256 = "275d9973793619a5374e1c89a4f4ad3f4b0a5510a2b5b939444bee8f4c4d37ce" } }
     wheels = [{ url = "https://files.pythonhosted.org/packages/68/fe/7ce1926952c8a403b35029e194555558514b365ad77d75125f521a2bec62/anyio-3.7.0-py3-none-any.whl", upload-time = 2023-05-27T11:12:44Z, size = 80873, hashes = { sha256 = "eddca883c4175f14df8aedce21054bfca3adb70ffe76a9f607aef9d7fa2ea7f0" } }]
@@ -4079,6 +4145,11 @@ fn pep_751_project_extra() -> Result<()> {
 
     [[packages]]
     name = "project"
+    dependencies = [
+        { name = "anyio", version = "3.7.0", marker = "'async' in extras" },
+        { name = "iniconfig", version = "2.0.0", marker = "'pytest' in extras" },
+        { name = "typing-extensions", version = "4.10.0" },
+    ]
     directory = { path = ".", editable = true }
 
     [[packages]]
@@ -4108,10 +4179,18 @@ fn pep_751_project_extra() -> Result<()> {
     lock-version = "1.0"
     created-by = "uv"
     requires-python = ">=3.12"
+    extras = [
+        "async",
+        "pytest",
+    ]
 
     [[packages]]
     name = "anyio"
     version = "3.7.0"
+    dependencies = [
+        { name = "idna", version = "3.6" },
+        { name = "sniffio", version = "1.3.1" },
+    ]
     index = "https://pypi.org/simple"
     sdist = { url = "https://files.pythonhosted.org/packages/c6/b3/fefbf7e78ab3b805dec67d698dc18dd505af7a18a8dd08868c9b4fa736b5/anyio-3.7.0.tar.gz", upload-time = 2023-05-27T11:12:46Z, size = 142737, hashes = { sha256 = "275d9973793619a5374e1c89a4f4ad3f4b0a5510a2b5b939444bee8f4c4d37ce" } }
     wheels = [{ url = "https://files.pythonhosted.org/packages/68/fe/7ce1926952c8a403b35029e194555558514b365ad77d75125f521a2bec62/anyio-3.7.0-py3-none-any.whl", upload-time = 2023-05-27T11:12:44Z, size = 80873, hashes = { sha256 = "eddca883c4175f14df8aedce21054bfca3adb70ffe76a9f607aef9d7fa2ea7f0" } }]
@@ -4125,6 +4204,11 @@ fn pep_751_project_extra() -> Result<()> {
 
     [[packages]]
     name = "project"
+    dependencies = [
+        { name = "anyio", version = "3.7.0", marker = "'async' in extras" },
+        { name = "iniconfig", version = "2.0.0", marker = "'pytest' in extras" },
+        { name = "typing-extensions", version = "4.10.0" },
+    ]
     directory = { path = ".", editable = true }
 
     [[packages]]
@@ -4149,7 +4233,6 @@ fn pep_751_project_extra() -> Result<()> {
 }
 
 #[test]
-#[cfg(feature = "git")]
 fn pep_751_git_dependency() -> Result<()> {
     let context = TestContext::new("3.12");
 
@@ -4178,6 +4261,11 @@ fn pep_751_git_dependency() -> Result<()> {
     lock-version = "1.0"
     created-by = "uv"
     requires-python = ">=3.12"
+
+    [[packages]]
+    name = "project"
+    dependencies = [{ name = "uv-public-pypackage", version = "0.1.0" }]
+    directory = { path = ".", editable = false }
 
     [[packages]]
     name = "uv-public-pypackage"
@@ -4221,6 +4309,10 @@ fn pep_751_wheel_url() -> Result<()> {
     [[packages]]
     name = "anyio"
     version = "4.3.0"
+    dependencies = [
+        { name = "idna", version = "3.6" },
+        { name = "sniffio", version = "1.3.1" },
+    ]
     archive = { url = "https://files.pythonhosted.org/packages/14/fd/2f20c40b45e4fb4324834aea24bd4afdf1143390242c0b33774da0e2e34f/anyio-4.3.0-py3-none-any.whl", hashes = { sha256 = "048e05d0f6caeed70d731f3db756d35dcc1f35747c8c403364a8332c630441b8" } }
 
     [[packages]]
@@ -4229,6 +4321,11 @@ fn pep_751_wheel_url() -> Result<()> {
     index = "https://pypi.org/simple"
     sdist = { url = "https://files.pythonhosted.org/packages/bf/3f/ea4b9117521a1e9c50344b909be7886dd00a519552724809bb1f486986c2/idna-3.6.tar.gz", upload-time = 2023-11-25T15:40:54Z, size = 175426, hashes = { sha256 = "9ecdbbd083b06798ae1e86adcbfe8ab1479cf864e4ee30fe4e46a003d12491ca" } }
     wheels = [{ url = "https://files.pythonhosted.org/packages/c2/e7/a82b05cf63a603df6e68d59ae6a68bf5064484a0718ea5033660af4b54a9/idna-3.6-py3-none-any.whl", upload-time = 2023-11-25T15:40:52Z, size = 61567, hashes = { sha256 = "c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f" } }]
+
+    [[packages]]
+    name = "project"
+    dependencies = [{ name = "anyio", version = "4.3.0" }]
+    directory = { path = ".", editable = false }
 
     [[packages]]
     name = "sniffio"
@@ -4274,6 +4371,10 @@ fn pep_751_sdist_url() -> Result<()> {
     [[packages]]
     name = "anyio"
     version = "4.3.0"
+    dependencies = [
+        { name = "idna", version = "3.6" },
+        { name = "sniffio", version = "1.3.1" },
+    ]
     archive = { url = "https://files.pythonhosted.org/packages/db/4d/3970183622f0330d3c23d9b8a5f52e365e50381fd484d08e3285104333d3/anyio-4.3.0.tar.gz", hashes = { sha256 = "f75253795a87df48568485fd18cdd2a3fa5c4f7c5be8e5e36637733fce06fed6" } }
 
     [[packages]]
@@ -4282,6 +4383,11 @@ fn pep_751_sdist_url() -> Result<()> {
     index = "https://pypi.org/simple"
     sdist = { url = "https://files.pythonhosted.org/packages/bf/3f/ea4b9117521a1e9c50344b909be7886dd00a519552724809bb1f486986c2/idna-3.6.tar.gz", upload-time = 2023-11-25T15:40:54Z, size = 175426, hashes = { sha256 = "9ecdbbd083b06798ae1e86adcbfe8ab1479cf864e4ee30fe4e46a003d12491ca" } }
     wheels = [{ url = "https://files.pythonhosted.org/packages/c2/e7/a82b05cf63a603df6e68d59ae6a68bf5064484a0718ea5033660af4b54a9/idna-3.6-py3-none-any.whl", upload-time = 2023-11-25T15:40:52Z, size = 61567, hashes = { sha256 = "c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f" } }]
+
+    [[packages]]
+    name = "project"
+    dependencies = [{ name = "anyio", version = "4.3.0" }]
+    directory = { path = ".", editable = false }
 
     [[packages]]
     name = "sniffio"
@@ -4330,6 +4436,10 @@ fn pep_751_sdist_url_subdirectory() -> Result<()> {
     [[packages]]
     name = "anyio"
     version = "4.3.0"
+    dependencies = [
+        { name = "idna", version = "3.6" },
+        { name = "sniffio", version = "1.3.1" },
+    ]
     index = "https://pypi.org/simple"
     sdist = { url = "https://files.pythonhosted.org/packages/db/4d/3970183622f0330d3c23d9b8a5f52e365e50381fd484d08e3285104333d3/anyio-4.3.0.tar.gz", upload-time = 2024-02-19T08:36:28Z, size = 159642, hashes = { sha256 = "f75253795a87df48568485fd18cdd2a3fa5c4f7c5be8e5e36637733fce06fed6" } }
     wheels = [{ url = "https://files.pythonhosted.org/packages/14/fd/2f20c40b45e4fb4324834aea24bd4afdf1143390242c0b33774da0e2e34f/anyio-4.3.0-py3-none-any.whl", upload-time = 2024-02-19T08:36:26Z, size = 85584, hashes = { sha256 = "048e05d0f6caeed70d731f3db756d35dcc1f35747c8c403364a8332c630441b8" } }]
@@ -4342,8 +4452,14 @@ fn pep_751_sdist_url_subdirectory() -> Result<()> {
     wheels = [{ url = "https://files.pythonhosted.org/packages/c2/e7/a82b05cf63a603df6e68d59ae6a68bf5064484a0718ea5033660af4b54a9/idna-3.6-py3-none-any.whl", upload-time = 2023-11-25T15:40:52Z, size = 61567, hashes = { sha256 = "c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f" } }]
 
     [[packages]]
+    name = "project"
+    dependencies = [{ name = "root", version = "0.0.1" }]
+    directory = { path = ".", editable = false }
+
+    [[packages]]
     name = "root"
     version = "0.0.1"
+    dependencies = [{ name = "anyio", version = "4.3.0" }]
     archive = { url = "https://github.com/user-attachments/files/18216295/subdirectory-test.tar.gz#subdirectory=packages/root", subdirectory = "packages/root", hashes = { sha256 = "24b55efee28d08ad3cdc58903e359e820601baa6a4a4b3424311541ebcfb09d3" } }
 
     [[packages]]
@@ -4418,6 +4534,10 @@ fn pep_751_infer_output_format() -> Result<()> {
     [[packages]]
     name = "anyio"
     version = "3.7.0"
+    dependencies = [
+        { name = "idna", version = "3.6" },
+        { name = "sniffio", version = "1.3.1" },
+    ]
     index = "https://pypi.org/simple"
     sdist = { url = "https://files.pythonhosted.org/packages/c6/b3/fefbf7e78ab3b805dec67d698dc18dd505af7a18a8dd08868c9b4fa736b5/anyio-3.7.0.tar.gz", upload-time = 2023-05-27T11:12:46Z, size = 142737, hashes = { sha256 = "275d9973793619a5374e1c89a4f4ad3f4b0a5510a2b5b939444bee8f4c4d37ce" } }
     wheels = [{ url = "https://files.pythonhosted.org/packages/68/fe/7ce1926952c8a403b35029e194555558514b365ad77d75125f521a2bec62/anyio-3.7.0-py3-none-any.whl", upload-time = 2023-05-27T11:12:44Z, size = 80873, hashes = { sha256 = "eddca883c4175f14df8aedce21054bfca3adb70ffe76a9f607aef9d7fa2ea7f0" } }]
@@ -4431,6 +4551,7 @@ fn pep_751_infer_output_format() -> Result<()> {
 
     [[packages]]
     name = "project"
+    dependencies = [{ name = "anyio", version = "3.7.0" }]
     directory = { path = ".", editable = true }
 
     [[packages]]
@@ -4457,6 +4578,10 @@ fn pep_751_infer_output_format() -> Result<()> {
     [[packages]]
     name = "anyio"
     version = "3.7.0"
+    dependencies = [
+        { name = "idna", version = "3.6" },
+        { name = "sniffio", version = "1.3.1" },
+    ]
     index = "https://pypi.org/simple"
     sdist = { url = "https://files.pythonhosted.org/packages/c6/b3/fefbf7e78ab3b805dec67d698dc18dd505af7a18a8dd08868c9b4fa736b5/anyio-3.7.0.tar.gz", upload-time = 2023-05-27T11:12:46Z, size = 142737, hashes = { sha256 = "275d9973793619a5374e1c89a4f4ad3f4b0a5510a2b5b939444bee8f4c4d37ce" } }
     wheels = [{ url = "https://files.pythonhosted.org/packages/68/fe/7ce1926952c8a403b35029e194555558514b365ad77d75125f521a2bec62/anyio-3.7.0-py3-none-any.whl", upload-time = 2023-05-27T11:12:44Z, size = 80873, hashes = { sha256 = "eddca883c4175f14df8aedce21054bfca3adb70ffe76a9f607aef9d7fa2ea7f0" } }]
@@ -4470,6 +4595,7 @@ fn pep_751_infer_output_format() -> Result<()> {
 
     [[packages]]
     name = "project"
+    dependencies = [{ name = "anyio", version = "3.7.0" }]
     directory = { path = ".", editable = true }
 
     [[packages]]
@@ -4483,7 +4609,7 @@ fn pep_751_infer_output_format() -> Result<()> {
     Resolved 4 packages in [TIME]
     "#);
 
-    uv_snapshot!(context.filters(), context.export().arg("-o").arg("pyproject.toml"), @"
+    uv_snapshot!(context.filters(), context.export().arg("-o").arg("pyproject.toml"), @r"
     success: false
     exit_code: 2
     ----- stdout -----
@@ -4517,7 +4643,7 @@ fn pep_751_filename() -> Result<()> {
 
     context.lock().assert().success();
 
-    uv_snapshot!(context.filters(), context.export().arg("--format").arg("pylock.toml").arg("-o").arg("test.toml"), @"
+    uv_snapshot!(context.filters(), context.export().arg("--format").arg("pylock.toml").arg("-o").arg("test.toml"), @r"
     success: false
     exit_code: 2
     ----- stdout -----
@@ -4557,6 +4683,11 @@ fn pep_751_https_git_credentials() -> Result<()> {
     lock-version = "1.0"
     created-by = "uv"
     requires-python = ">=3.12"
+
+    [[packages]]
+    name = "project"
+    dependencies = [{ name = "uv-private-pypackage", version = "0.1.0" }]
+    directory = { path = ".", editable = false }
 
     [[packages]]
     name = "uv-private-pypackage"
@@ -4601,6 +4732,11 @@ fn pep_751_https_credentials() -> Result<()> {
     version = "2.0.0"
     archive = { url = "https://public:heron@pypi-proxy.fly.dev/basic-auth/files/packages/ef/a6/62565a6e1cf69e10f5727360368e451d4b7f58beeac6173dc9db836a5b46/iniconfig-2.0.0-py3-none-any.whl", hashes = { sha256 = "b6a85871a79d2e3b22d2d1b94ac2824226a63c6b741c88f7ae975f18b6778374" } }
 
+    [[packages]]
+    name = "project"
+    dependencies = [{ name = "iniconfig", version = "2.0.0" }]
+    directory = { path = ".", editable = false }
+
     ----- stderr -----
     Resolved 2 packages in [TIME]
     "#);
@@ -4624,7 +4760,7 @@ fn no_editable_env_var() -> Result<()> {
         .assert()
         .success();
 
-    uv_snapshot!(context.filters(), context.export().env(EnvVars::UV_NO_EDITABLE, "1"), @"
+    uv_snapshot!(context.filters(), context.export().env(EnvVars::UV_NO_EDITABLE, "1"), @r"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -4661,7 +4797,7 @@ fn export_only_group_and_extra_conflict() -> Result<()> {
     )?;
 
     // Using --only-group and --extra together should error.
-    uv_snapshot!(context.filters(), context.export().arg("--only-group").arg("dev").arg("--extra").arg("test"), @"
+    uv_snapshot!(context.filters(), context.export().arg("--only-group").arg("dev").arg("--extra").arg("test"), @r###"
     success: false
     exit_code: 2
     ----- stdout -----
@@ -4672,10 +4808,10 @@ fn export_only_group_and_extra_conflict() -> Result<()> {
     Usage: uv export --cache-dir [CACHE_DIR] --only-group <ONLY_GROUP> --exclude-newer <EXCLUDE_NEWER>
 
     For more information, try '--help'.
-    ");
+    "###);
 
     // Using --only-group and --all-extras together should also error.
-    uv_snapshot!(context.filters(), context.export().arg("--only-group").arg("dev").arg("--all-extras"), @"
+    uv_snapshot!(context.filters(), context.export().arg("--only-group").arg("dev").arg("--all-extras"), @r###"
     success: false
     exit_code: 2
     ----- stdout -----
@@ -4686,7 +4822,7 @@ fn export_only_group_and_extra_conflict() -> Result<()> {
     Usage: uv export --cache-dir [CACHE_DIR] --only-group <ONLY_GROUP> --exclude-newer <EXCLUDE_NEWER>
 
     For more information, try '--help'.
-    ");
+    "###);
 
     Ok(())
 }
@@ -4721,7 +4857,7 @@ fn export_lock_workspace_mismatch_with_frozen() -> Result<()> {
         "#,
     )?;
 
-    uv_snapshot!(context.filters(), context.export().arg("--frozen"), @"
+    uv_snapshot!(context.filters(), context.export().arg("--frozen"), @r"
     success: false
     exit_code: 2
     ----- stdout -----
@@ -4807,7 +4943,7 @@ fn multiple_packages() -> Result<()> {
     // Export `foo` and `bar`.
     uv_snapshot!(context.filters(), context.export()
         .arg("--package").arg("foo")
-        .arg("--package").arg("bar"), @r"
+        .arg("--package").arg("bar"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -4834,13 +4970,13 @@ fn multiple_packages() -> Result<()> {
 
     ----- stderr -----
     Resolved 9 packages in [TIME]
-    ");
+    "###);
 
     // Export `foo`, `bar`, and `baz`.
     uv_snapshot!(context.filters(), context.export()
         .arg("--package").arg("foo")
         .arg("--package").arg("bar")
-        .arg("--package").arg("baz"), @r"
+        .arg("--package").arg("baz"), @r###"
     success: true
     exit_code: 0
     ----- stdout -----
@@ -4872,7 +5008,7 @@ fn multiple_packages() -> Result<()> {
 
     ----- stderr -----
     Resolved 9 packages in [TIME]
-    ");
+    "###);
 
     Ok(())
 }
@@ -5971,7 +6107,7 @@ fn cyclonedx_export_workspace_frozen() -> Result<()> {
     // Remove the child `pyproject.toml`.
     fs_err::remove_dir_all(child.path())?;
 
-    uv_snapshot!(context.filters(), context.export().arg("--format").arg("cyclonedx1.5").arg("--all-packages"), @"
+    uv_snapshot!(context.filters(), context.export().arg("--format").arg("cyclonedx1.5").arg("--all-packages"), @r###"
     success: false
     exit_code: 1
     ----- stdout -----
@@ -5980,7 +6116,7 @@ fn cyclonedx_export_workspace_frozen() -> Result<()> {
       × Failed to build `project @ file://[TEMP_DIR]/`
       ├─▶ Failed to parse entry: `child`
       ╰─▶ `child` references a workspace in `tool.uv.sources` (e.g., `child = { workspace = true }`), but is not a workspace member
-    ");
+    "###);
 
     uv_snapshot!(context.filters(), context.export().arg("--format").arg("cyclonedx1.5").arg("--all-packages").arg("--frozen"), @r#"
     success: true
@@ -8164,7 +8300,7 @@ fn cyclonedx_export_all_packages_conflicting_workspace_members() -> Result<()> {
     "#);
 
     // Should fail when exporting to `requirements.txt` or `pylock.toml`as conflict detection is enabled for these formats
-    uv_snapshot!(context.filters(), context.export().arg("--format").arg("requirements-txt").arg("--all-packages"), @"
+    uv_snapshot!(context.filters(), context.export().arg("--format").arg("requirements-txt").arg("--all-packages"), @r"
     success: false
     exit_code: 2
     ----- stdout -----
@@ -8175,16 +8311,30 @@ fn cyclonedx_export_all_packages_conflicting_workspace_members() -> Result<()> {
     error: Package `child` and package `project` are incompatible with the declared conflicts: {child, project}
     ");
 
-    uv_snapshot!(context.filters(), context.export().arg("--format").arg("pylock.toml").arg("--all-packages"), @"
-    success: false
-    exit_code: 2
+    uv_snapshot!(context.filters(), context.export().arg("--format").arg("pylock.toml").arg("--all-packages"), @r#"
+    success: true
+    exit_code: 0
     ----- stdout -----
+    # This file was autogenerated by uv via the following command:
+    #    uv export --cache-dir [CACHE_DIR] --format pylock.toml --all-packages
+    lock-version = "1.0"
+    created-by = "uv"
+    requires-python = ">=3.12"
+
+    [[packages]]
+    name = "child"
+    dependencies = [{ name = "sortedcontainers", version = "2.4.0" }]
+    directory = { path = "child", editable = true }
+
+    [[packages]]
+    name = "project"
+    dependencies = [{ name = "sortedcontainers", version = "2.3.0" }]
+    directory = { path = ".", editable = true }
 
     ----- stderr -----
     warning: Declaring conflicts for packages (`package = ...`) is experimental and may change without warning. Pass `--preview-features package-conflicts` to disable this warning.
     Resolved 4 packages in [TIME]
-    error: Package `child` and package `project` are incompatible with the declared conflicts: {child, project}
-    ");
+    "#);
     Ok(())
 }
 
@@ -8410,6 +8560,569 @@ fn cyclonedx_export_alternative_registry() -> Result<()> {
     Resolved 12 packages in [TIME]
     warning: `uv export --format=cyclonedx1.5` is experimental and may change without warning. Pass `--preview-features sbom-export` to disable this warning.
     "#);
+
+    Ok(())
+}
+
+#[test]
+fn pep_751_conflicting_extras() -> Result<()> {
+    let context = TestContext::new("3.12");
+
+    let pyproject_toml = context.temp_dir.child("pyproject.toml");
+    pyproject_toml.write_str(
+        r#"
+        [project]
+        name = "project"
+        version = "0.1.0"
+        requires-python = ">=3.12"
+        dependencies = []
+
+        [tool.uv]
+        conflicts = [
+            [
+              { extra = "extra1" },
+              { extra = "extra2" },
+            ],
+        ]
+
+        [project.optional-dependencies]
+        extra1 = ["sortedcontainers==2.3.0"]
+        extra2 = ["sortedcontainers==2.4.0"]
+
+        [build-system]
+        requires = ["setuptools>=42"]
+        build-backend = "setuptools.build_meta"
+        "#,
+    )?;
+
+    context.lock().assert().success();
+
+    // Export with extra1 - shows dependencies with PEP 751 'extra' in extras markers
+    uv_snapshot!(context.filters(), context.export().arg("--format").arg("pylock.toml").arg("--extra").arg("extra1"), @r#"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+    # This file was autogenerated by uv via the following command:
+    #    uv export --cache-dir [CACHE_DIR] --format pylock.toml --extra extra1
+    lock-version = "1.0"
+    created-by = "uv"
+    requires-python = ">=3.12"
+    extras = [
+        "extra1",
+        "extra2",
+    ]
+
+    [[packages]]
+    name = "project"
+    dependencies = [
+        { name = "sortedcontainers", version = "2.3.0", marker = "'extra1' in extras" },
+        { name = "sortedcontainers", version = "2.4.0", marker = "'extra2' in extras" },
+    ]
+    directory = { path = ".", editable = true }
+
+    [[packages]]
+    name = "sortedcontainers"
+    version = "2.3.0"
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/14/10/6a9481890bae97da9edd6e737c9c3dec6aea3fc2fa53b0934037b35c89ea/sortedcontainers-2.3.0.tar.gz", upload-time = 2020-11-09T00:03:52Z, size = 30509, hashes = { sha256 = "59cc937650cf60d677c16775597c89a960658a09cf7c1a668f86e1e4464b10a1" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/20/4d/a7046ae1a1a4cc4e9bbed194c387086f06b25038be596543d026946330c9/sortedcontainers-2.3.0-py2.py3-none-any.whl", upload-time = 2020-11-09T00:03:50Z, size = 29479, hashes = { sha256 = "37257a32add0a3ee490bb170b599e93095eed89a55da91fa9f48753ea12fd73f" } }]
+
+    ----- stderr -----
+    Resolved 3 packages in [TIME]
+    "#);
+
+    // Export with extra2 - shows dependencies with PEP 751 'extra' in extras markers
+    uv_snapshot!(context.filters(), context.export().arg("--format").arg("pylock.toml").arg("--extra").arg("extra2"), @r#"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+    # This file was autogenerated by uv via the following command:
+    #    uv export --cache-dir [CACHE_DIR] --format pylock.toml --extra extra2
+    lock-version = "1.0"
+    created-by = "uv"
+    requires-python = ">=3.12"
+    extras = [
+        "extra1",
+        "extra2",
+    ]
+
+    [[packages]]
+    name = "project"
+    dependencies = [
+        { name = "sortedcontainers", version = "2.3.0", marker = "'extra1' in extras" },
+        { name = "sortedcontainers", version = "2.4.0", marker = "'extra2' in extras" },
+    ]
+    directory = { path = ".", editable = true }
+
+    [[packages]]
+    name = "sortedcontainers"
+    version = "2.4.0"
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/e8/c4/ba2f8066cceb6f23394729afe52f3bf7adec04bf9ed2c820b39e19299111/sortedcontainers-2.4.0.tar.gz", upload-time = 2021-05-16T22:03:42Z, size = 30594, hashes = { sha256 = "25caa5a06cc30b6b83d11423433f65d1f9d76c4c6a0c90e3379eaa43b9bfdb88" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/32/46/9cb0e58b2deb7f82b84065f37f3bffeb12413f947f9388e4cac22c4621ce/sortedcontainers-2.4.0-py2.py3-none-any.whl", upload-time = 2021-05-16T22:03:41Z, size = 29575, hashes = { sha256 = "a163dcaede0f1c021485e957a39245190e74249897e2ae4b2aa38595db237ee0" } }]
+
+    ----- stderr -----
+    Resolved 3 packages in [TIME]
+    "#);
+
+    Ok(())
+}
+
+#[test]
+fn pep_751_transitive_extras() -> Result<()> {
+    let context = TestContext::new("3.12");
+
+    let pyproject_toml = context.temp_dir.child("pyproject.toml");
+    pyproject_toml.write_str(
+        r#"
+        [project]
+        name = "project"
+        version = "0.1.0"
+        requires-python = ">=3.12"
+        dependencies = ["requests[socks]"]
+
+        [project.optional-dependencies]
+        dev = ["iniconfig"]
+
+        [build-system]
+        requires = ["setuptools>=42"]
+        build-backend = "setuptools.build_meta"
+        "#,
+    )?;
+
+    context.lock().assert().success();
+
+    uv_snapshot!(context.filters(), context.export().arg("--format").arg("pylock.toml").arg("--extra").arg("dev"), @r#"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+    # This file was autogenerated by uv via the following command:
+    #    uv export --cache-dir [CACHE_DIR] --format pylock.toml --extra dev
+    lock-version = "1.0"
+    created-by = "uv"
+    requires-python = ">=3.12"
+    extras = [
+        "dev",
+    ]
+
+    [[packages]]
+    name = "certifi"
+    version = "2024.2.2"
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/71/da/e94e26401b62acd6d91df2b52954aceb7f561743aa5ccc32152886c76c96/certifi-2024.2.2.tar.gz", upload-time = 2024-02-02T01:22:17Z, size = 164886, hashes = { sha256 = "0569859f95fc761b18b45ef421b1290a0f65f147e92a1e5eb3e635f9a5e4e66f" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/ba/06/a07f096c664aeb9f01624f858c3add0a4e913d6c96257acb4fce61e7de14/certifi-2024.2.2-py3-none-any.whl", upload-time = 2024-02-02T01:22:14Z, size = 163774, hashes = { sha256 = "dc383c07b76109f368f6106eee2b593b04a011ea4d55f652c6ca24a754d1cdd1" } }]
+
+    [[packages]]
+    name = "charset-normalizer"
+    version = "3.3.2"
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/63/09/c1bc53dab74b1816a00d8d030de5bf98f724c52c1635e07681d312f20be8/charset-normalizer-3.3.2.tar.gz", upload-time = 2023-11-01T04:04:59Z, size = 104809, hashes = { sha256 = "f30c3cb33b24454a82faecaf01b19c18562b1e89558fb6c56de4d9118a032fd5" } }
+    wheels = [
+        { url = "https://files.pythonhosted.org/packages/d1/b2/fcedc8255ec42afee97f9e6f0145c734bbe104aac28300214593eb326f1d/charset_normalizer-3.3.2-cp312-cp312-macosx_10_9_universal2.whl", upload-time = 2023-11-01T04:03:24Z, size = 192892, hashes = { sha256 = "0b2b64d2bb6d3fb9112bafa732def486049e63de9618b5843bcdd081d8144cd8" } },
+        { url = "https://files.pythonhosted.org/packages/2e/7d/2259318c202f3d17f3fe6438149b3b9e706d1070fe3fcbb28049730bb25c/charset_normalizer-3.3.2-cp312-cp312-macosx_10_9_x86_64.whl", upload-time = 2023-11-01T04:03:25Z, size = 122213, hashes = { sha256 = "ddbb2551d7e0102e7252db79ba445cdab71b26640817ab1e3e3648dad515003b" } },
+        { url = "https://files.pythonhosted.org/packages/3a/52/9f9d17c3b54dc238de384c4cb5a2ef0e27985b42a0e5cc8e8a31d918d48d/charset_normalizer-3.3.2-cp312-cp312-macosx_11_0_arm64.whl", upload-time = 2023-11-01T04:03:27Z, size = 119404, hashes = { sha256 = "55086ee1064215781fff39a1af09518bc9255b50d6333f2e4c74ca09fac6a8f6" } },
+        { url = "https://files.pythonhosted.org/packages/99/b0/9c365f6d79a9f0f3c379ddb40a256a67aa69c59609608fe7feb6235896e1/charset_normalizer-3.3.2-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", upload-time = 2023-11-01T04:03:28Z, size = 137275, hashes = { sha256 = "8f4a014bc36d3c57402e2977dada34f9c12300af536839dc38c0beab8878f38a" } },
+        { url = "https://files.pythonhosted.org/packages/91/33/749df346e93d7a30cdcb90cbfdd41a06026317bfbfb62cd68307c1a3c543/charset_normalizer-3.3.2-cp312-cp312-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", upload-time = 2023-11-01T04:03:29Z, size = 147518, hashes = { sha256 = "a10af20b82360ab00827f916a6058451b723b4e65030c5a18577c8b2de5b3389" } },
+        { url = "https://files.pythonhosted.org/packages/72/1a/641d5c9f59e6af4c7b53da463d07600a695b9824e20849cb6eea8a627761/charset_normalizer-3.3.2-cp312-cp312-manylinux_2_17_s390x.manylinux2014_s390x.whl", upload-time = 2023-11-01T04:03:31Z, size = 140182, hashes = { sha256 = "8d756e44e94489e49571086ef83b2bb8ce311e730092d2c34ca8f7d925cb20aa" } },
+        { url = "https://files.pythonhosted.org/packages/ee/fb/14d30eb4956408ee3ae09ad34299131fb383c47df355ddb428a7331cfa1e/charset_normalizer-3.3.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", upload-time = 2023-11-01T04:03:32Z, size = 141869, hashes = { sha256 = "90d558489962fd4918143277a773316e56c72da56ec7aa3dc3dbbe20fdfed15b" } },
+        { url = "https://files.pythonhosted.org/packages/df/3e/a06b18788ca2eb6695c9b22325b6fde7dde0f1d1838b1792a0076f58fe9d/charset_normalizer-3.3.2-cp312-cp312-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", upload-time = 2023-11-01T04:03:34Z, size = 144042, hashes = { sha256 = "6ac7ffc7ad6d040517be39eb591cac5ff87416c2537df6ba3cba3bae290c0fed" } },
+        { url = "https://files.pythonhosted.org/packages/45/59/3d27019d3b447a88fe7e7d004a1e04be220227760264cc41b405e863891b/charset_normalizer-3.3.2-cp312-cp312-musllinux_1_1_aarch64.whl", upload-time = 2023-11-01T04:03:35Z, size = 138275, hashes = { sha256 = "7ed9e526742851e8d5cc9e6cf41427dfc6068d4f5a3bb03659444b4cabf6bc26" } },
+        { url = "https://files.pythonhosted.org/packages/7b/ef/5eb105530b4da8ae37d506ccfa25057961b7b63d581def6f99165ea89c7e/charset_normalizer-3.3.2-cp312-cp312-musllinux_1_1_i686.whl", upload-time = 2023-11-01T04:03:37Z, size = 144819, hashes = { sha256 = "8bdb58ff7ba23002a4c5808d608e4e6c687175724f54a5dade5fa8c67b604e4d" } },
+        { url = "https://files.pythonhosted.org/packages/a2/51/e5023f937d7f307c948ed3e5c29c4b7a3e42ed2ee0b8cdf8f3a706089bf0/charset_normalizer-3.3.2-cp312-cp312-musllinux_1_1_ppc64le.whl", upload-time = 2023-11-01T04:03:38Z, size = 149415, hashes = { sha256 = "6b3251890fff30ee142c44144871185dbe13b11bab478a88887a639655be1068" } },
+        { url = "https://files.pythonhosted.org/packages/24/9d/2e3ef673dfd5be0154b20363c5cdcc5606f35666544381bee15af3778239/charset_normalizer-3.3.2-cp312-cp312-musllinux_1_1_s390x.whl", upload-time = 2023-11-01T04:03:40Z, size = 141212, hashes = { sha256 = "b4a23f61ce87adf89be746c8a8974fe1c823c891d8f86eb218bb957c924bb143" } },
+        { url = "https://files.pythonhosted.org/packages/5b/ae/ce2c12fcac59cb3860b2e2d76dc405253a4475436b1861d95fe75bdea520/charset_normalizer-3.3.2-cp312-cp312-musllinux_1_1_x86_64.whl", upload-time = 2023-11-01T04:03:41Z, size = 142167, hashes = { sha256 = "efcb3f6676480691518c177e3b465bcddf57cea040302f9f4e6e191af91174d4" } },
+        { url = "https://files.pythonhosted.org/packages/ed/3a/a448bf035dce5da359daf9ae8a16b8a39623cc395a2ffb1620aa1bce62b0/charset_normalizer-3.3.2-cp312-cp312-win32.whl", upload-time = 2023-11-01T04:03:42Z, size = 93041, hashes = { sha256 = "d965bba47ddeec8cd560687584e88cf699fd28f192ceb452d1d7ee807c5597b7" } },
+        { url = "https://files.pythonhosted.org/packages/b6/7c/8debebb4f90174074b827c63242c23851bdf00a532489fba57fef3416e40/charset_normalizer-3.3.2-cp312-cp312-win_amd64.whl", upload-time = 2023-11-01T04:03:44Z, size = 100397, hashes = { sha256 = "96b02a3dc4381e5494fad39be677abcb5e6634bf7b4fa83a6dd3112607547001" } },
+        { url = "https://files.pythonhosted.org/packages/28/76/e6222113b83e3622caa4bb41032d0b1bf785250607392e1b778aca0b8a7d/charset_normalizer-3.3.2-py3-none-any.whl", upload-time = 2023-11-01T04:04:58Z, size = 48543, hashes = { sha256 = "3e4d1f6587322d2788836a99c69062fbb091331ec940e02d12d179c1d53e25fc" } },
+    ]
+
+    [[packages]]
+    name = "idna"
+    version = "3.6"
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/bf/3f/ea4b9117521a1e9c50344b909be7886dd00a519552724809bb1f486986c2/idna-3.6.tar.gz", upload-time = 2023-11-25T15:40:54Z, size = 175426, hashes = { sha256 = "9ecdbbd083b06798ae1e86adcbfe8ab1479cf864e4ee30fe4e46a003d12491ca" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/c2/e7/a82b05cf63a603df6e68d59ae6a68bf5064484a0718ea5033660af4b54a9/idna-3.6-py3-none-any.whl", upload-time = 2023-11-25T15:40:52Z, size = 61567, hashes = { sha256 = "c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f" } }]
+
+    [[packages]]
+    name = "iniconfig"
+    version = "2.0.0"
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/d7/4b/cbd8e699e64a6f16ca3a8220661b5f83792b3017d0f79807cb8708d33913/iniconfig-2.0.0.tar.gz", upload-time = 2023-01-07T11:08:11Z, size = 4646, hashes = { sha256 = "2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/ef/a6/62565a6e1cf69e10f5727360368e451d4b7f58beeac6173dc9db836a5b46/iniconfig-2.0.0-py3-none-any.whl", upload-time = 2023-01-07T11:08:09Z, size = 5892, hashes = { sha256 = "b6a85871a79d2e3b22d2d1b94ac2824226a63c6b741c88f7ae975f18b6778374" } }]
+
+    [[packages]]
+    name = "project"
+    dependencies = [
+        { name = "iniconfig", version = "2.0.0", marker = "'dev' in extras" },
+        { name = "requests", version = "2.31.0", extras = ["socks"] },
+    ]
+    directory = { path = ".", editable = true }
+
+    [[packages]]
+    name = "pysocks"
+    version = "1.7.1"
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/bd/11/293dd436aea955d45fc4e8a35b6ae7270f5b8e00b53cf6c024c83b657a11/PySocks-1.7.1.tar.gz", upload-time = 2019-09-20T02:07:35Z, size = 284429, hashes = { sha256 = "3f8804571ebe159c380ac6de37643bb4685970655d3bba243530d6558b799aa0" } }
+    wheels = [{ name = "pysocks-1.7.1-py3-none-any.whl", url = "https://files.pythonhosted.org/packages/8d/59/b4572118e098ac8e46e399a1dd0f2d85403ce8bbaad9ec79373ed6badaf9/PySocks-1.7.1-py3-none-any.whl", upload-time = 2019-09-20T02:06:22Z, size = 16725, hashes = { sha256 = "2725bd0a9925919b9b51739eea5f9e2bae91e83288108a9ad338b2e3a4435ee5" } }]
+
+    [[packages]]
+    name = "requests"
+    version = "2.31.0"
+    dependencies = [
+        { name = "certifi", version = "2024.2.2" },
+        { name = "charset-normalizer", version = "3.3.2" },
+        { name = "idna", version = "3.6" },
+        { name = "pysocks", version = "1.7.1", marker = "extra == 'socks'" },
+        { name = "urllib3", version = "2.2.1" },
+    ]
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/9d/be/10918a2eac4ae9f02f6cfe6414b7a155ccd8f7f9d4380d62fd5b955065c3/requests-2.31.0.tar.gz", upload-time = 2023-05-22T15:12:44Z, size = 110794, hashes = { sha256 = "942c5a758f98d790eaed1a29cb6eefc7ffb0d1cf7af05c3d2791656dbd6ad1e1" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/70/8e/0e2d847013cb52cd35b38c009bb167a1a26b2ce6cd6965bf26b47bc0bf44/requests-2.31.0-py3-none-any.whl", upload-time = 2023-05-22T15:12:42Z, size = 62574, hashes = { sha256 = "58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f" } }]
+
+    [[packages]]
+    name = "urllib3"
+    version = "2.2.1"
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/7a/50/7fd50a27caa0652cd4caf224aa87741ea41d3265ad13f010886167cfcc79/urllib3-2.2.1.tar.gz", upload-time = 2024-02-18T03:55:57Z, size = 291020, hashes = { sha256 = "d0570876c61ab9e520d776c38acbbb5b05a776d3f9ff98a5c8fd5162a444cf19" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/a2/73/a68704750a7679d0b6d3ad7aa8d4da8e14e151ae82e6fee774e6e0d05ec8/urllib3-2.2.1-py3-none-any.whl", upload-time = 2024-02-18T03:55:54Z, size = 121067, hashes = { sha256 = "450b20ec296a467077128bff42b73080516e71b56ff59a60a02bef2232c4fa9d" } }]
+
+    ----- stderr -----
+    Resolved 8 packages in [TIME]
+    "#);
+
+    Ok(())
+}
+
+#[test]
+fn pep_751_dependency_groups() -> Result<()> {
+    let context = TestContext::new("3.12");
+
+    let pyproject_toml = context.temp_dir.child("pyproject.toml");
+    pyproject_toml.write_str(
+        r#"
+        [project]
+        name = "project"
+        version = "0.1.0"
+        requires-python = ">=3.12"
+        dependencies = ["iniconfig"]
+
+        [dependency-groups]
+        test = ["pytest"]
+        coverage = ["covdefaults"]
+
+        [build-system]
+        requires = ["setuptools>=42"]
+        build-backend = "setuptools.build_meta"
+        "#,
+    )?;
+
+    context.lock().assert().success();
+
+    uv_snapshot!(context.filters(), context.export().arg("--format").arg("pylock.toml").arg("--group").arg("test").arg("--group").arg("coverage"), @r#"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+    # This file was autogenerated by uv via the following command:
+    #    uv export --cache-dir [CACHE_DIR] --format pylock.toml --group test --group coverage
+    lock-version = "1.0"
+    created-by = "uv"
+    requires-python = ">=3.12"
+    dependency-groups = [
+        "coverage",
+        "test",
+    ]
+
+    [[packages]]
+    name = "colorama"
+    version = "0.4.6"
+    marker = "sys_platform == 'win32'"
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/d8/53/6f443c9a4a8358a93a6792e2acffb9d9d5cb0a5cfd8802644b7b1c9a02e4/colorama-0.4.6.tar.gz", upload-time = 2022-10-25T02:36:22Z, size = 27697, hashes = { sha256 = "08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl", upload-time = 2022-10-25T02:36:20Z, size = 25335, hashes = { sha256 = "4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6" } }]
+
+    [[packages]]
+    name = "covdefaults"
+    version = "2.3.0"
+    dependencies = [{ name = "coverage", version = "7.4.4" }]
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/44/ee/9a6f2611f72e4c5657ae5542a510cf4164d2c673687c0ea73bb1cbd85b4d/covdefaults-2.3.0.tar.gz", upload-time = 2023-03-05T16:43:34Z, size = 4835, hashes = { sha256 = "4e99f679f12d792bc62e5510fa3eb59546ed47bd569e36e4fddc4081c9c3ebf7" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/76/4c/823bc951445aa97e5a1b7e337690db3abf85212c8d138e170922e7916ac8/covdefaults-2.3.0-py2.py3-none-any.whl", upload-time = 2023-03-05T16:43:33Z, size = 5144, hashes = { sha256 = "2832961f6ffcfe4b57c338bc3418a3526f495c26fb9c54565409c5532f7c41be" } }]
+
+    [[packages]]
+    name = "coverage"
+    version = "7.4.4"
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/bf/d5/f809d8b630cf4c11fe490e20037a343d12a74ec2783c6cdb5aee725e7137/coverage-7.4.4.tar.gz", upload-time = 2024-03-14T19:11:17Z, size = 783727, hashes = { sha256 = "c901df83d097649e257e803be22592aedfd5182f07b3cc87d640bbb9afd50f49" } }
+    wheels = [
+        { url = "https://files.pythonhosted.org/packages/a0/de/a54b245e781bfd6f3fd7ce5566a695686b5c25ee7c743f514e7634428972/coverage-7.4.4-cp312-cp312-macosx_10_9_x86_64.whl", upload-time = 2024-03-14T19:09:59Z, size = 206409, hashes = { sha256 = "201bef2eea65e0e9c56343115ba3814e896afe6d36ffd37bab783261db430f76" } },
+        { url = "https://files.pythonhosted.org/packages/88/92/07f9c593cd27e3c595b8cb83b95adad8c9ba3d611debceed097a5fd6be4b/coverage-7.4.4-cp312-cp312-macosx_11_0_arm64.whl", upload-time = 2024-03-14T19:10:01Z, size = 206568, hashes = { sha256 = "41c9c5f3de16b903b610d09650e5e27adbfa7f500302718c9ffd1c12cf9d6818" } },
+        { url = "https://files.pythonhosted.org/packages/41/6d/e142c823e5d4b24481f990da4cf9d2d577a6f4e1fb6faf39d9a4e42b1d43/coverage-7.4.4-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", upload-time = 2024-03-14T19:10:04Z, size = 238920, hashes = { sha256 = "d898fe162d26929b5960e4e138651f7427048e72c853607f2b200909794ed978" } },
+        { url = "https://files.pythonhosted.org/packages/30/1a/105f0139df6a2adbcaa0c110711a46dbd9f59e93a09ca15a97d59c2564f2/coverage-7.4.4-cp312-cp312-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", upload-time = 2024-03-14T19:10:07Z, size = 236288, hashes = { sha256 = "3ea79bb50e805cd6ac058dfa3b5c8f6c040cb87fe83de10845857f5535d1db70" } },
+        { url = "https://files.pythonhosted.org/packages/98/79/185cb42910b6a2b2851980407c8445ac0da0750dff65e420e86f973c8396/coverage-7.4.4-cp312-cp312-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", upload-time = 2024-03-14T19:10:10Z, size = 238223, hashes = { sha256 = "ce4b94265ca988c3f8e479e741693d143026632672e3ff924f25fab50518dd51" } },
+        { url = "https://files.pythonhosted.org/packages/92/12/2303d1c543a11ea060dbc7144ed3174fc09107b5dd333649415c95ede58b/coverage-7.4.4-cp312-cp312-musllinux_1_1_aarch64.whl", upload-time = 2024-03-14T19:10:12Z, size = 245161, hashes = { sha256 = "00838a35b882694afda09f85e469c96367daa3f3f2b097d846a7216993d37f4c" } },
+        { url = "https://files.pythonhosted.org/packages/96/5a/7d0e945c4759fe9d19aad1679dd3096aeb4cb9fcf0062fe24554dc4787b8/coverage-7.4.4-cp312-cp312-musllinux_1_1_i686.whl", upload-time = 2024-03-14T19:10:14Z, size = 243066, hashes = { sha256 = "fdfafb32984684eb03c2d83e1e51f64f0906b11e64482df3c5db936ce3839d48" } },
+        { url = "https://files.pythonhosted.org/packages/f4/1b/79cdb7b11bbbd6540a536ac79412904b5c1f8903d5c1330084212afa8ceb/coverage-7.4.4-cp312-cp312-musllinux_1_1_x86_64.whl", upload-time = 2024-03-14T19:10:16Z, size = 244805, hashes = { sha256 = "69eb372f7e2ece89f14751fbcbe470295d73ed41ecd37ca36ed2eb47512a6ab9" } },
+        { url = "https://files.pythonhosted.org/packages/af/7f/54dc676e7e63549838a3a7b95a8e11df80441bf7d64c6ce8f1cdbc0d1ff0/coverage-7.4.4-cp312-cp312-win32.whl", upload-time = 2024-03-14T19:10:18Z, size = 208590, hashes = { sha256 = "137eb07173141545e07403cca94ab625cc1cc6bc4c1e97b6e3846270e7e1fea0" } },
+        { url = "https://files.pythonhosted.org/packages/46/c4/1dfe76d96034a347d717a2392b004d42d45934cb94efa362ad41ca871f6e/coverage-7.4.4-cp312-cp312-win_amd64.whl", upload-time = 2024-03-14T19:10:20Z, size = 209415, hashes = { sha256 = "d71eec7d83298f1af3326ce0ff1d0ea83c7cb98f72b577097f9083b20bdaf05e" } },
+    ]
+
+    [[packages]]
+    name = "iniconfig"
+    version = "2.0.0"
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/d7/4b/cbd8e699e64a6f16ca3a8220661b5f83792b3017d0f79807cb8708d33913/iniconfig-2.0.0.tar.gz", upload-time = 2023-01-07T11:08:11Z, size = 4646, hashes = { sha256 = "2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/ef/a6/62565a6e1cf69e10f5727360368e451d4b7f58beeac6173dc9db836a5b46/iniconfig-2.0.0-py3-none-any.whl", upload-time = 2023-01-07T11:08:09Z, size = 5892, hashes = { sha256 = "b6a85871a79d2e3b22d2d1b94ac2824226a63c6b741c88f7ae975f18b6778374" } }]
+
+    [[packages]]
+    name = "packaging"
+    version = "24.0"
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/ee/b5/b43a27ac7472e1818c4bafd44430e69605baefe1f34440593e0332ec8b4d/packaging-24.0.tar.gz", upload-time = 2024-03-10T09:39:28Z, size = 147882, hashes = { sha256 = "eb82c5e3e56209074766e6885bb04b8c38a0c015d0a30036ebe7ece34c9989e9" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/49/df/1fceb2f8900f8639e278b056416d49134fb8d84c5942ffaa01ad34782422/packaging-24.0-py3-none-any.whl", upload-time = 2024-03-10T09:39:25Z, size = 53488, hashes = { sha256 = "2ddfb553fdf02fb784c234c7ba6ccc288296ceabec964ad2eae3777778130bc5" } }]
+
+    [[packages]]
+    name = "pluggy"
+    version = "1.4.0"
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/54/c6/43f9d44d92aed815e781ca25ba8c174257e27253a94630d21be8725a2b59/pluggy-1.4.0.tar.gz", upload-time = 2024-01-24T13:45:15Z, size = 65812, hashes = { sha256 = "8c85c2876142a764e5b7548e7d9a0e0ddb46f5185161049a79b7e974454223be" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/a5/5b/0cc789b59e8cc1bf288b38111d002d8c5917123194d45b29dcdac64723cc/pluggy-1.4.0-py3-none-any.whl", upload-time = 2024-01-24T13:45:14Z, size = 20120, hashes = { sha256 = "7db9f7b503d67d1c5b95f59773ebb58a8c1c288129a88665838012cfb07b8981" } }]
+
+    [[packages]]
+    name = "project"
+    dependencies = [
+        { name = "covdefaults", version = "2.3.0", marker = "'coverage' in dependency_groups" },
+        { name = "iniconfig", version = "2.0.0" },
+        { name = "pytest", version = "8.1.1", marker = "'test' in dependency_groups" },
+    ]
+    directory = { path = ".", editable = true }
+
+    [[packages]]
+    name = "pytest"
+    version = "8.1.1"
+    dependencies = [
+        { name = "colorama", version = "0.4.6", marker = "sys_platform == 'win32'" },
+        { name = "iniconfig", version = "2.0.0" },
+        { name = "packaging", version = "24.0" },
+        { name = "pluggy", version = "1.4.0" },
+    ]
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/30/b7/7d44bbc04c531dcc753056920e0988032e5871ac674b5a84cb979de6e7af/pytest-8.1.1.tar.gz", upload-time = 2024-03-09T11:51:08Z, size = 1409703, hashes = { sha256 = "ac978141a75948948817d360297b7aae0fcb9d6ff6bc9ec6d514b85d5a65c044" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/4d/7e/c79cecfdb6aa85c6c2e3cf63afc56d0f165f24f5c66c03c695c4d9b84756/pytest-8.1.1-py3-none-any.whl", upload-time = 2024-03-09T11:51:04Z, size = 337359, hashes = { sha256 = "2a8386cfc11fa9d2c50ee7b2a57e7d898ef90470a7a34c4b949ff59662bb78b7" } }]
+
+    ----- stderr -----
+    Resolved 8 packages in [TIME]
+    "#);
+
+    Ok(())
+}
+
+/// Test that the `environments` field is populated from `tool.uv.environments`
+#[test]
+fn pep_751_environments() -> Result<()> {
+    let context = TestContext::new("3.12");
+
+    let pyproject_toml = context.temp_dir.child("pyproject.toml");
+    pyproject_toml.write_str(
+        r#"
+        [project]
+        name = "project"
+        version = "0.1.0"
+        requires-python = ">=3.12"
+        dependencies = ["anyio==3.7.0"]
+
+        [tool.uv]
+        environments = [
+            "sys_platform == 'darwin'",
+            "sys_platform == 'linux'",
+        ]
+
+        [build-system]
+        requires = ["setuptools>=42"]
+        build-backend = "setuptools.build_meta"
+        "#,
+    )?;
+
+    context.lock().assert().success();
+
+    uv_snapshot!(context.filters(), context.export().arg("--format").arg("pylock.toml"), @r#"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+    # This file was autogenerated by uv via the following command:
+    #    uv export --cache-dir [CACHE_DIR] --format pylock.toml
+    lock-version = "1.0"
+    created-by = "uv"
+    environments = [
+        "sys_platform == 'darwin'",
+        "sys_platform == 'linux'",
+    ]
+    requires-python = ">=3.12"
+
+    [[packages]]
+    name = "anyio"
+    version = "3.7.0"
+    marker = "sys_platform == 'darwin' or sys_platform == 'linux'"
+    dependencies = [
+        { name = "idna", version = "3.6", marker = "sys_platform == 'darwin' or sys_platform == 'linux'" },
+        { name = "sniffio", version = "1.3.1", marker = "sys_platform == 'darwin' or sys_platform == 'linux'" },
+    ]
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/c6/b3/fefbf7e78ab3b805dec67d698dc18dd505af7a18a8dd08868c9b4fa736b5/anyio-3.7.0.tar.gz", upload-time = 2023-05-27T11:12:46Z, size = 142737, hashes = { sha256 = "275d9973793619a5374e1c89a4f4ad3f4b0a5510a2b5b939444bee8f4c4d37ce" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/68/fe/7ce1926952c8a403b35029e194555558514b365ad77d75125f521a2bec62/anyio-3.7.0-py3-none-any.whl", upload-time = 2023-05-27T11:12:44Z, size = 80873, hashes = { sha256 = "eddca883c4175f14df8aedce21054bfca3adb70ffe76a9f607aef9d7fa2ea7f0" } }]
+
+    [[packages]]
+    name = "idna"
+    version = "3.6"
+    marker = "sys_platform == 'darwin' or sys_platform == 'linux'"
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/bf/3f/ea4b9117521a1e9c50344b909be7886dd00a519552724809bb1f486986c2/idna-3.6.tar.gz", upload-time = 2023-11-25T15:40:54Z, size = 175426, hashes = { sha256 = "9ecdbbd083b06798ae1e86adcbfe8ab1479cf864e4ee30fe4e46a003d12491ca" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/c2/e7/a82b05cf63a603df6e68d59ae6a68bf5064484a0718ea5033660af4b54a9/idna-3.6-py3-none-any.whl", upload-time = 2023-11-25T15:40:52Z, size = 61567, hashes = { sha256 = "c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f" } }]
+
+    [[packages]]
+    name = "project"
+    dependencies = [{ name = "anyio", version = "3.7.0", marker = "sys_platform == 'darwin' or sys_platform == 'linux'" }]
+    directory = { path = ".", editable = true }
+
+    [[packages]]
+    name = "sniffio"
+    version = "1.3.1"
+    marker = "sys_platform == 'darwin' or sys_platform == 'linux'"
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/a2/87/a6771e1546d97e7e041b6ae58d80074f81b7d5121207425c964ddf5cfdbd/sniffio-1.3.1.tar.gz", upload-time = 2024-02-25T23:20:04Z, size = 20372, hashes = { sha256 = "f4324edc670a0f49750a81b895f35c3adb843cca46f0530f79fc1babb23789dc" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/e9/44/75a9c9421471a6c4805dbf2356f7c181a29c1879239abab1ea2cc8f38b40/sniffio-1.3.1-py3-none-any.whl", upload-time = 2024-02-25T23:20:01Z, size = 10235, hashes = { sha256 = "2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2" } }]
+
+    ----- stderr -----
+    Resolved 4 packages in [TIME]
+    "#);
+
+    Ok(())
+}
+
+/// Test conflicting extras with transitive extra dependencies in PEP 751 multi-use lock files.
+///
+/// Scenario:
+/// - Root project has conflicting extras `a1` and `a2`
+/// - `a1` depends on `b[e1]`
+/// - `a2` depends on `b[e2]`
+/// - Package `b` has conflicting extras `e1` and `e2` with different versions of sortedcontainers
+///
+/// The exported pylock.toml contains all packages (b, sortedcontainers 2.3.0, and sortedcontainers
+/// 2.4.0) with markers, including virtual workspace root packages.
+#[test]
+fn pep_751_conflicting_extras_transitive_extras() -> Result<()> {
+    let context = TestContext::new("3.12");
+
+    let pyproject_toml = context.temp_dir.child("pyproject.toml");
+    pyproject_toml.write_str(
+        r#"
+        [project]
+        name = "project"
+        version = "0.1.0"
+        requires-python = ">=3.12"
+        dependencies = []
+
+        [tool.uv]
+        conflicts = [
+            [
+              { extra = "a1" },
+              { extra = "a2" },
+            ],
+        ]
+
+        [tool.uv.workspace]
+        members = ["b"]
+
+        [tool.uv.sources]
+        b = { workspace = true }
+
+        [project.optional-dependencies]
+        a1 = ["b[e1]"]
+        a2 = ["b[e2]"]
+        "#,
+    )?;
+
+    let b = context.temp_dir.child("b");
+    b.child("pyproject.toml").write_str(
+        r#"
+        [project]
+        name = "b"
+        version = "0.1.0"
+        requires-python = ">=3.12"
+        dependencies = []
+
+        [tool.uv]
+        conflicts = [
+            [
+              { extra = "e1" },
+              { extra = "e2" },
+            ],
+        ]
+
+        [project.optional-dependencies]
+        e1 = ["sortedcontainers==2.3.0"]
+        e2 = ["sortedcontainers==2.4.0"]
+
+        [build-system]
+        requires = ["setuptools>=42"]
+        build-backend = "setuptools.build_meta"
+        "#,
+    )?;
+
+    context.lock().assert().success();
+
+    // Export a single multi-use lock file containing both conflicting versions
+    uv_snapshot!(context.filters(), context.export().arg("--format").arg("pylock.toml").arg("--all-extras"), @r#"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+    # This file was autogenerated by uv via the following command:
+    #    uv export --cache-dir [CACHE_DIR] --format pylock.toml --all-extras
+    lock-version = "1.0"
+    created-by = "uv"
+    requires-python = ">=3.12"
+    extras = [
+        "a1",
+        "a2",
+    ]
+
+    [[packages]]
+    name = "b"
+    dependencies = [
+        { name = "sortedcontainers", version = "2.3.0", marker = "extra == 'e1'" },
+        { name = "sortedcontainers", version = "2.4.0", marker = "extra == 'e2'" },
+    ]
+    directory = { path = "b", editable = true }
+
+    [[packages]]
+    name = "project"
+    dependencies = [
+        { name = "b", version = "0.1.0", marker = "'a1' in extras" },
+        { name = "b", version = "0.1.0", marker = "'a2' in extras" },
+        { name = "b", version = "0.1.0", extras = ["e1"], marker = "'a1' in extras" },
+        { name = "b", version = "0.1.0", extras = ["e2"], marker = "'a2' in extras" },
+    ]
+    directory = { path = ".", editable = false }
+
+    [[packages]]
+    name = "sortedcontainers"
+    version = "2.3.0"
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/14/10/6a9481890bae97da9edd6e737c9c3dec6aea3fc2fa53b0934037b35c89ea/sortedcontainers-2.3.0.tar.gz", upload-time = 2020-11-09T00:03:52Z, size = 30509, hashes = { sha256 = "59cc937650cf60d677c16775597c89a960658a09cf7c1a668f86e1e4464b10a1" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/20/4d/a7046ae1a1a4cc4e9bbed194c387086f06b25038be596543d026946330c9/sortedcontainers-2.3.0-py2.py3-none-any.whl", upload-time = 2020-11-09T00:03:50Z, size = 29479, hashes = { sha256 = "37257a32add0a3ee490bb170b599e93095eed89a55da91fa9f48753ea12fd73f" } }]
+
+    [[packages]]
+    name = "sortedcontainers"
+    version = "2.4.0"
+    index = "https://pypi.org/simple"
+    sdist = { url = "https://files.pythonhosted.org/packages/e8/c4/ba2f8066cceb6f23394729afe52f3bf7adec04bf9ed2c820b39e19299111/sortedcontainers-2.4.0.tar.gz", upload-time = 2021-05-16T22:03:42Z, size = 30594, hashes = { sha256 = "25caa5a06cc30b6b83d11423433f65d1f9d76c4c6a0c90e3379eaa43b9bfdb88" } }
+    wheels = [{ url = "https://files.pythonhosted.org/packages/32/46/9cb0e58b2deb7f82b84065f37f3bffeb12413f947f9388e4cac22c4621ce/sortedcontainers-2.4.0-py2.py3-none-any.whl", upload-time = 2021-05-16T22:03:41Z, size = 29575, hashes = { sha256 = "a163dcaede0f1c021485e957a39245190e74249897e2ae4b2aa38595db237ee0" } }]
+
+    ----- stderr -----
+    Resolved 4 packages in [TIME]
+    "#);
+
+    // Verify that both sortedcontainers versions and the virtual project package are exported
+    // TODO: Add installation tests once full multi-use lock file support is implemented
 
     Ok(())
 }
