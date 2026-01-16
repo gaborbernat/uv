@@ -93,32 +93,25 @@ execute properly.
 
 These tests can be disabled by turning off either `git` or `git-lfs` uv features.
 
-### Corporate firewalls and proxies
+### Tests which require the network
 
-Some tests require access to external services such as `pypi-proxy.fly.dev` (used for authentication
-tests). If you're behind a corporate firewall or VPN that blocks access to these domains, these
-tests will fail with connection errors or 403 responses.
+Many tests require network access to external services such as PyPI and `pypi-proxy.fly.dev` (used
+for authentication tests). If you're running tests in an offline environment, behind a corporate
+firewall, or on a VPN that blocks access to these domains, some tests will fail with connection
+errors or 403 responses.
 
-To skip these tests locally:
+To skip network-dependent tests locally, you can run tests without certain features (e.g.,
+`native-auth`) or use nextest filtersets to exclude specific tests:
 
 ```shell
-# Skip native authentication tests that require external service access
-cargo nextest run --features native-auth -E 'not test(native_auth)'
-
-# Or run tests without the native-auth feature entirely
+# Run tests without the native-auth feature
 cargo nextest run
+
+# Or skip specific tests using nextest filtersets
+cargo nextest run -E 'not test(native_auth)'
 ```
 
-You can verify if your network blocks the test server:
-
-```shell
-curl -s -o /dev/null -w "%{http_code}" https://pypi-proxy.fly.dev/basic-auth/simple/
-# Expected: 401 (Unauthorized) - server is reachable
-# If you get: 403 or connection error - blocked by firewall/proxy
-```
-
-If blocked, you can either request a firewall exception for `pypi-proxy.fly.dev`, temporarily
-disconnect from VPN, or skip these tests and let CI run them.
+If specific tests fail due to network restrictions, you can skip them locally and let CI run them.
 
 ### Local testing
 
