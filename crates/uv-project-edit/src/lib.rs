@@ -8,7 +8,8 @@ use glob::Pattern;
 use itertools::Itertools;
 use thiserror::Error;
 use toml_edit::{
-    Array, ArrayOfTables, DocumentMut, Formatted, Item, RawString, Table, TomlError, Value,
+    Array, ArrayOfTables, DocumentMut, Formatted, InlineTable, Item, Key, RawString, Table,
+    TomlError, Value,
 };
 
 use uv_cache_key::CanonicalUrl;
@@ -603,59 +604,8 @@ impl PyProjectTomlMut {
         source: Option<&Source>,
         raw: bool,
     ) -> Result<ArrayEdit, Error> {
-        // Get or create `dependency-groups`.
-        let dependency_groups = self
-            .doc
-            .entry("dependency-groups")
-            .or_insert(Item::Table(Table::new()))
-            .as_table_like_mut()
-            .ok_or(Error::MalformedDependencies)?;
-
-        let was_sorted = dependency_groups
-            .get_values()
-            .iter()
-            .filter_map(|(dotted_ks, _)| dotted_ks.first())
-            .map(|k| k.get())
-            .is_sorted();
-
-        // Try to find the existing group.
-        let existing_group = dependency_groups.iter_mut().find_map(|(key, value)| {
-            if GroupName::from_str(key.get()).is_ok_and(|g| g == *group) {
-                Some(value)
-            } else {
-                None
-            }
-        });
-
-        // If the group doesn't exist, create it.
-        let group = match existing_group {
-            Some(value) => value,
-            None => dependency_groups
-                .entry(group.as_ref())
-                .or_insert(Item::Value(Value::Array(Array::new()))),
-        }
-        .as_array_mut()
-        .ok_or(Error::MalformedDependencies)?;
-
-        let added = add_dependency(req, group, source.is_some(), raw)?;
-
-        // To avoid churn in pyproject.toml, we only sort new group keys if the
-        // existing keys were sorted.
-        if was_sorted {
-            dependency_groups.sort_values();
-        }
-
-        // If `dependency-groups` is an inline table, reformat it.
-        //
-        // Reformatting can drop comments between keys, but you can't put comments
-        // between items in an inline table anyway.
-        if let Some(dependency_groups) = self
-            .doc
-            .get_mut("dependency-groups")
-            .and_then(Item::as_inline_table_mut)
-        {
-            dependency_groups.fmt();
-        }
+        let dependencies = self.dependency_groups_array(group)?;
+        let added = add_dependency(req, dependencies, source.is_some(), raw)?;
 
         if let Some(source) = source {
             self.add_source(&req.name, source)?;
@@ -666,49 +616,7 @@ impl PyProjectTomlMut {
 
     /// Ensure that a dependency group exists, creating an empty group if it doesn't.
     pub fn ensure_dependency_group(&mut self, group: &GroupName) -> Result<(), Error> {
-        // Get or create `dependency-groups`.
-        let dependency_groups = self
-            .doc
-            .entry("dependency-groups")
-            .or_insert(Item::Table(Table::new()))
-            .as_table_like_mut()
-            .ok_or(Error::MalformedDependencies)?;
-
-        let was_sorted = dependency_groups
-            .get_values()
-            .iter()
-            .filter_map(|(dotted_ks, _)| dotted_ks.first())
-            .map(|k| k.get())
-            .is_sorted();
-
-        // Check if the group already exists.
-        let group_exists = dependency_groups
-            .iter()
-            .any(|(key, _value)| GroupName::from_str(key).is_ok_and(|g| g == *group));
-
-        // If the group doesn't exist, create it.
-        if !group_exists {
-            dependency_groups.insert(group.as_ref(), Item::Value(Value::Array(Array::new())));
-
-            // To avoid churn in pyproject.toml, we only sort new group keys if the
-            // existing keys were sorted.
-            if was_sorted {
-                dependency_groups.sort_values();
-            }
-        }
-
-        // If `dependency-groups` is an inline table, reformat it.
-        //
-        // Reformatting can drop comments between keys, but you can't put comments
-        // between items in an inline table anyway.
-        if let Some(dependency_groups) = self
-            .doc
-            .get_mut("dependency-groups")
-            .and_then(Item::as_inline_table_mut)
-        {
-            dependency_groups.fmt();
-        }
-
+        self.dependency_group_mut(group)?;
         Ok(())
     }
 
@@ -808,31 +716,41 @@ impl PyProjectTomlMut {
 
     /// Get the TOML array for a `dependency-groups` entry.
     fn dependency_groups_array(&mut self, group: &GroupName) -> Result<&mut Array, Error> {
-        // Get or create `dependency-groups`.
-        let dependency_groups = self
+        self.dependency_group_mut(group)?
+            .as_array_mut()
+            .ok_or(Error::MalformedDependencies)
+    }
+
+    /// Get or create a dependency group, preserving its spelling and the surrounding layout.
+    fn dependency_group_mut(&mut self, group: &GroupName) -> Result<&mut Item, Error> {
+        let groups = self
             .doc
             .entry("dependency-groups")
-            .or_insert(Item::Table(Table::new()))
-            .as_table_like_mut()
-            .ok_or(Error::MalformedDependencies)?;
-
-        // Try to find the existing group.
-        let existing_key = dependency_groups.iter().find_map(|(key, _value)| {
-            if GroupName::from_str(key).is_ok_and(|g| g == *group) {
-                Some(key.to_string())
-            } else {
-                None
-            }
+            .or_insert(Item::Table(Table::new()));
+        let table = groups.as_table_like().ok_or(Error::MalformedDependencies)?;
+        let existing_key = table.iter().find_map(|(key, _)| {
+            GroupName::from_str(key)
+                .is_ok_and(|name| name == *group)
+                .then(|| key.to_owned())
         });
+        if let Some(key) = existing_key {
+            return groups.get_mut(&key).ok_or(Error::MalformedDependencies);
+        }
 
-        // If the group doesn't exist, create it.
-        let group = dependency_groups
-            .entry(existing_key.as_deref().unwrap_or(group.as_ref()))
-            .or_insert(Item::Value(Value::Array(Array::new())))
-            .as_array_mut()
-            .ok_or(Error::MalformedDependencies)?;
-
-        Ok(group)
+        // Preserve the existing order unless the groups were already sorted.
+        let sorted = table.iter().map(|(key, _)| key).is_sorted();
+        if let Some(table) = groups.as_inline_table_mut() {
+            insert_inline_group(table, group.as_ref(), sorted);
+        } else {
+            let table = groups.as_table_mut().ok_or(Error::MalformedDependencies)?;
+            table.insert(group.as_ref(), Item::Value(Value::Array(Array::new())));
+            if sorted {
+                table.sort_values();
+            }
+        }
+        groups
+            .get_mut(group.as_ref())
+            .ok_or(Error::MalformedDependencies)
     }
 
     /// Get an existing TOML array for a dependency type.
@@ -1264,6 +1182,70 @@ fn implicit() -> Item {
     let mut table = Table::new();
     table.set_implicit(true);
     Item::Table(table)
+}
+
+/// Insert a dependency group without reformatting the surrounding inline table.
+fn insert_inline_group(table: &mut InlineTable, name: &str, sorted: bool) {
+    let mut key = Key::new(name);
+    let mut array = Array::new();
+    if let Some((mut next, _)) = table.iter_mut().find(|(key, _)| sorted && key.get() > name) {
+        // The next key's prefix starts with the preceding field's end-of-line comment.
+        let decor = next.leaf_decor_mut();
+        if let Some(prefix) = decor.prefix().and_then(RawString::as_str)
+            && let Some((before, after)) = split_group_separator(prefix, None)
+        {
+            key.leaf_decor_mut().set_prefix(before);
+            decor.set_prefix(after);
+        }
+    } else {
+        // With no trailing comma, the gap before `}` belongs to the last value.
+        let trailing_comma = table.trailing_comma();
+        let mut closing = table.trailing().as_str().unwrap_or_default().to_owned();
+        let mut indent = None;
+        if let Some((last_key, last_value)) = table.iter_mut().last() {
+            indent = last_key
+                .leaf_decor()
+                .prefix()
+                .and_then(RawString::as_str)
+                .and_then(|prefix| prefix.rsplit_once('\n'))
+                .map(|(_, indent)| indent.to_owned());
+            if !trailing_comma {
+                let decor = last_value.decor_mut();
+                decor
+                    .suffix()
+                    .and_then(RawString::as_str)
+                    .unwrap_or(" ")
+                    .clone_into(&mut closing);
+                decor.set_suffix("");
+            }
+        }
+        if let Some((before, after)) = split_group_separator(&closing, indent.as_deref()) {
+            key.leaf_decor_mut().set_prefix(before);
+            closing = after;
+        }
+        if trailing_comma {
+            array.decor_mut().set_suffix("");
+            table.set_trailing(closing);
+        } else {
+            if !table.is_empty() || !closing.is_empty() {
+                array.decor_mut().set_suffix(closing);
+            }
+            table.set_trailing("");
+        }
+    }
+    table.insert_formatted(&key, Value::Array(array));
+    if sorted {
+        table.sort_values();
+    }
+}
+
+/// Split the gap at its first newline. An end-of-line comment stays with the preceding
+/// field, while standalone comments stay with the following field or closing brace.
+fn split_group_separator(gap: &str, indent: Option<&str>) -> Option<(String, String)> {
+    let (line, rest) = gap.split_once('\n')?;
+    let indent = indent.unwrap_or_else(|| rest.rsplit('\n').next().unwrap_or_default());
+    let newline = if line.ends_with('\r') { "\r\n" } else { "\n" };
+    Some((format!("{line}\n{indent}"), format!("{newline}{rest}")))
 }
 
 /// Adds a dependency to the given `deps` array.
